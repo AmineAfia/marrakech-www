@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
@@ -9,23 +9,23 @@ import { generateTimeSeriesData } from "./chart-utils"
 const chartConfig = {
   success: {
     label: "Success",
-    color: "var(--chart-1)",
+    color: "hsl(142, 76%, 36%)", // Datadog green
   },
   failed: {
     label: "Failed",
-    color: "var(--chart-2)",
+    color: "hsl(0, 84%, 60%)", // Datadog red
   },
   timeout: {
     label: "Timeout",
-    color: "var(--chart-3)",
+    color: "hsl(25, 95%, 53%)", // Datadog orange
   },
   rateLimited: {
     label: "Rate Limited",
-    color: "var(--chart-4)",
+    color: "hsl(262, 83%, 58%)", // Datadog purple
   },
   error: {
     label: "Error",
-    color: "var(--chart-5)",
+    color: "hsl(0, 0%, 45%)", // Datadog gray
   },
 } satisfies ChartConfig
 
@@ -46,27 +46,89 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
+          <AreaChart accessibilityLayer data={chartData}>
+            <defs>
+              <linearGradient id="gradient-status-success" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.1}/>
+              </linearGradient>
+              <linearGradient id="gradient-status-failed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.1}/>
+              </linearGradient>
+              <linearGradient id="gradient-status-timeout" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(25, 95%, 53%)" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="hsl(25, 95%, 53%)" stopOpacity={0.1}/>
+              </linearGradient>
+              <linearGradient id="gradient-status-rateLimited" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.1}/>
+              </linearGradient>
+              <linearGradient id="gradient-status-error" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(0, 0%, 45%)" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="hsl(0, 0%, 45%)" stopOpacity={0.1}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="time"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={8}
               axisLine={false}
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => value.toLocaleString()}
+              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
             />
-            <ChartTooltip content={<ChartTooltipContent />} />
+            <ChartTooltip 
+              content={<ChartTooltipContent />}
+              cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1 }}
+            />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="success" stackId="a" fill="var(--color-success)" radius={0} />
-            <Bar dataKey="failed" stackId="a" fill="var(--color-failed)" radius={0} />
-            <Bar dataKey="timeout" stackId="a" fill="var(--color-timeout)" radius={0} />
-            <Bar dataKey="rateLimited" stackId="a" fill="var(--color-rateLimited)" radius={0} />
-            <Bar dataKey="error" stackId="a" fill="var(--color-error)" radius={0} />
-          </BarChart>
+            <Area 
+              type="monotone" 
+              dataKey="success" 
+              stackId="a" 
+              stroke="hsl(142, 76%, 36%)" 
+              fill="url(#gradient-status-success)" 
+              strokeWidth={2}
+            />
+            <Area 
+              type="monotone" 
+              dataKey="failed" 
+              stackId="a" 
+              stroke="hsl(0, 84%, 60%)" 
+              fill="url(#gradient-status-failed)" 
+              strokeWidth={2}
+            />
+            <Area 
+              type="monotone" 
+              dataKey="timeout" 
+              stackId="a" 
+              stroke="hsl(25, 95%, 53%)" 
+              fill="url(#gradient-status-timeout)" 
+              strokeWidth={2}
+            />
+            <Area 
+              type="monotone" 
+              dataKey="rateLimited" 
+              stackId="a" 
+              stroke="hsl(262, 83%, 58%)" 
+              fill="url(#gradient-status-rateLimited)" 
+              strokeWidth={2}
+            />
+            <Area 
+              type="monotone" 
+              dataKey="error" 
+              stackId="a" 
+              stroke="hsl(0, 0%, 45%)" 
+              fill="url(#gradient-status-error)" 
+              strokeWidth={2}
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
