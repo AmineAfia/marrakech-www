@@ -3,7 +3,7 @@
 import { Slot } from "@radix-ui/react-slot"
 import { RiLoader2Fill } from "@remixicon/react"
 import React from "react"
-import { tv, type VariantProps } from "tailwind-variants"
+import { type VariantProps, tv } from "tailwind-variants"
 
 import { cx, focusRing } from "@/lib/utils"
 
@@ -22,27 +22,25 @@ const buttonVariants = tv({
         // border
         "border-transparent",
         // text color
-        "text-white dark:text-gray-900",
+        "text-white",
         // background color
-        "bg-indigo-600 dark:bg-indigo-500",
+        "bg-brand",
         // hover color
-        "hover:bg-indigo-500 dark:hover:bg-indigo-600",
+        "hover:bg-blue-8",
         // disabled
-        "disabled:bg-indigo-100 disabled:text-gray-400",
-        "disabled:dark:bg-indigo-800 disabled:dark:text-indigo-400",
+        "disabled:bg-gray-3 disabled:text-gray-5",
       ],
       secondary: [
         // border
-        "border-gray-300 dark:border-gray-800",
+        "border-border",
         // text color
-        "text-gray-900 dark:text-gray-50",
+        "text-fg",
         // background color
-        "bg-white dark:bg-gray-950",
+        "bg-surface",
         //hover color
-        "hover:bg-gray-50 dark:hover:bg-gray-900/60",
+        "hover:bg-surface-hover",
         // disabled
-        "disabled:text-gray-400",
-        "disabled:dark:text-gray-600",
+        "disabled:text-gray-5",
       ],
       light: [
         // base
@@ -50,14 +48,13 @@ const buttonVariants = tv({
         // border
         "border-transparent",
         // text color
-        "text-gray-900 dark:text-gray-50",
+        "text-fg",
         // background color
-        "bg-gray-200 dark:bg-gray-900",
+        "bg-surface-hover",
         // hover color
-        "hover:bg-gray-300/70 dark:hover:bg-gray-800/80",
+        "hover:bg-surface-active",
         // disabled
-        "disabled:bg-gray-100 disabled:text-gray-400",
-        "disabled:dark:bg-gray-800 disabled:dark:text-gray-600",
+        "disabled:bg-gray-2 disabled:text-gray-5",
       ],
       ghost: [
         // base
@@ -65,12 +62,11 @@ const buttonVariants = tv({
         // border
         "border-transparent",
         // text color
-        "text-gray-900 dark:text-gray-50",
+        "text-fg",
         // hover color
-        "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800/80",
+        "bg-transparent hover:bg-surface-hover",
         // disabled
-        "disabled:text-gray-400",
-        "disabled:dark:text-gray-600",
+        "disabled:text-gray-5",
       ],
       destructive: [
         // text color
@@ -78,12 +74,11 @@ const buttonVariants = tv({
         // border
         "border-transparent",
         // background color
-        "bg-red-600 dark:bg-red-700",
+        "bg-danger",
         // hover color
-        "hover:bg-red-700 dark:hover:bg-red-600",
+        "hover:bg-red-7",
         // disabled
-        "disabled:bg-red-300 disabled:text-white",
-        "disabled:dark:bg-red-950 disabled:dark:text-red-400",
+        "disabled:bg-gray-3 disabled:text-gray-5",
       ],
     },
   },

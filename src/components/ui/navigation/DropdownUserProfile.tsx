@@ -1,24 +1,24 @@
 "use client"
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSubMenu,
-  DropdownMenuSubMenuContent,
-  DropdownMenuSubMenuTrigger,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuSubMenu,
+    DropdownMenuSubMenuContent,
+    DropdownMenuSubMenuTrigger,
+    DropdownMenuTrigger,
 } from "@/components/Dropdown"
 import {
-  RiArrowRightUpLine,
-  RiComputerLine,
-  RiMoonLine,
-  RiSunLine,
+    RiArrowRightUpLine,
+    RiComputerLine,
+    RiMoonLine,
+    RiSunLine,
 } from "@remixicon/react"
 import { useTheme } from "next-themes"
 import * as React from "react"
@@ -96,21 +96,21 @@ export function DropdownUserProfile({
             <DropdownMenuItem>
               Changelog
               <RiArrowRightUpLine
-                className="mb-1 ml-1 size-2.5 shrink-0 text-gray-500"
+                className="mb-1 ml-1 size-2.5 shrink-0 text-fg-muted"
                 aria-hidden="true"
               />
             </DropdownMenuItem>
             <DropdownMenuItem>
               Documentation
               <RiArrowRightUpLine
-                className="mb-1 ml-1 size-2.5 shrink-0 text-gray-500"
+                className="mb-1 ml-1 size-2.5 shrink-0 text-fg-muted"
                 aria-hidden="true"
               />
             </DropdownMenuItem>
             <DropdownMenuItem>
               Join Slack community
               <RiArrowRightUpLine
-                className="mb-1 ml-1 size-2.5 shrink-0 text-gray-500"
+                className="mb-1 ml-1 size-2.5 shrink-0 text-fg-muted"
                 aria-hidden="true"
               />
             </DropdownMenuItem>

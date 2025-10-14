@@ -35,7 +35,7 @@ const Table = React.forwardRef<
       // base
       "w-full caption-bottom border-b",
       // border color
-      "border-gray-200 dark:border-gray-800",
+      "border-border",
       className,
     )}
     {...props}
@@ -65,7 +65,7 @@ const TableHeaderCell = React.forwardRef<
       // text color
       "text-gray-900 dark:text-gray-50",
       // border color
-      "border-gray-200 dark:border-gray-800",
+      "border-border",
       className,
     )}
     {...props}
@@ -172,13 +172,14 @@ const TableCaption = React.forwardRef<
 TableCaption.displayName = "TableCaption"
 
 export {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFoot,
-  TableHead,
-  TableHeaderCell,
-  TableRoot,
-  TableRow,
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFoot,
+    TableHead,
+    TableHeaderCell,
+    TableRoot,
+    TableRow
 }
+

@@ -2,17 +2,17 @@
 import { siteConfig } from "@/app/siteConfig"
 import { cx, focusRing } from "@/lib/utils"
 import {
-  RiHome2Line,
-  RiLinkM,
-  RiListCheck,
-  RiSettings5Line,
+    RiHome2Line,
+    RiLinkM,
+    RiListCheck,
+    RiSettings5Line,
 } from "@remixicon/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import MobileSidebar from "./MobileSidebar"
 import {
-  WorkspacesDropdownDesktop,
-  WorkspacesDropdownMobile,
+    WorkspacesDropdownDesktop,
+    WorkspacesDropdownMobile,
 } from "./SidebarWorkspacesDropdown"
 import { UserProfileDesktop, UserProfileMobile } from "./UserProfile"
 
@@ -61,7 +61,7 @@ export function Sidebar() {
     <>
       {/* sidebar (lg+) */}
       <nav className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <aside className="flex grow flex-col gap-y-6 overflow-y-auto border-r border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-950">
+        <aside className="flex grow flex-col gap-y-6 overflow-y-auto border-r border-border bg-surface p-4">
           <WorkspacesDropdownDesktop />
           <nav
             aria-label="core navigation links"
@@ -74,9 +74,9 @@ export function Sidebar() {
                     href={item.href}
                     className={cx(
                       isActive(item.href)
-                        ? "text-indigo-600 dark:text-indigo-400"
-                        : "text-gray-700 hover:text-gray-900 dark:text-gray-400 hover:dark:text-gray-50",
-                      "flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition hover:bg-gray-100 hover:dark:bg-gray-900",
+                        ? "text-brand"
+                        : "text-fg hover:text-fg",
+                      "flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition hover:bg-surface-hover",
                       focusRing,
                     )}
                   >
@@ -87,7 +87,7 @@ export function Sidebar() {
               ))}
             </ul>
             <div>
-              <span className="text-xs font-medium leading-6 text-gray-500">
+              <span className="text-xs font-medium leading-6 text-fg-muted">
                 Shortcuts
               </span>
               <ul aria-label="shortcuts" role="list" className="space-y-0.5">
@@ -97,9 +97,9 @@ export function Sidebar() {
                       href={item.href}
                       className={cx(
                         pathname === item.href || pathname.startsWith(item.href)
-                          ? "text-indigo-600 dark:text-indigo-400"
-                          : "text-gray-700 hover:text-gray-900 dark:text-gray-400 hover:dark:text-gray-50",
-                        "flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition hover:bg-gray-100 hover:dark:bg-gray-900",
+                          ? "text-brand"
+                          : "text-fg hover:text-fg",
+                        "flex items-center gap-x-2.5 rounded-md px-2 py-1.5 text-sm font-medium transition hover:bg-surface-hover",
                         focusRing,
                       )}
                     >
@@ -120,7 +120,7 @@ export function Sidebar() {
         </aside>
       </nav>
       {/* top navbar (xs-lg) */}
-      <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-2 shadow-sm sm:gap-x-6 sm:px-4 lg:hidden dark:border-gray-800 dark:bg-gray-950">
+      <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between border-b border-border bg-surface px-2 shadow-sm sm:gap-x-6 sm:px-4 lg:hidden">
         <WorkspacesDropdownMobile />
         <div className="flex items-center gap-1 sm:gap-2">
           <UserProfileMobile />

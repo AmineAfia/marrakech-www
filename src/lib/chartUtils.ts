@@ -3,59 +3,59 @@
 export type ColorUtility = "bg" | "stroke" | "fill" | "text"
 
 export const chartColors = {
-  blue: {
-    bg: "bg-blue-500",
-    stroke: "stroke-blue-500",
-    fill: "fill-blue-500",
-    text: "text-blue-500",
-  },
-  emerald: {
-    bg: "bg-emerald-500",
-    stroke: "stroke-emerald-500",
-    fill: "fill-emerald-500",
-    text: "text-emerald-500",
-  },
-  violet: {
-    bg: "bg-violet-500",
-    stroke: "stroke-violet-500",
-    fill: "fill-violet-500",
-    text: "text-violet-500",
-  },
-  amber: {
-    bg: "bg-amber-500",
-    stroke: "stroke-amber-500",
-    fill: "fill-amber-500",
-    text: "text-amber-500",
-  },
-  gray: {
-    bg: "bg-gray-400 dark:bg-gray-600",
-    stroke: "stroke-gray-400 dark:stroke-gray-600",
-    fill: "fill-gray-400 dark:fill-gray-600",
-    text: "text-gray-400 dark:text-gray-600",
-  },
-  cyan: {
-    bg: "bg-cyan-500",
-    stroke: "stroke-cyan-500",
-    fill: "fill-cyan-500",
-    text: "text-cyan-500",
-  },
-  indigo: {
-    bg: "bg-indigo-600 dark:bg-indigo-500",
-    stroke: "stroke-indigo-600 dark:stroke-indigo-500",
-    fill: "fill-indigo-600 dark:fill-indigo-500",
-    text: "text-indigo-600 dark:text-indigo-500",
-  },
-  pink: {
-    bg: "bg-pink-500",
-    stroke: "stroke-pink-500",
-    fill: "fill-pink-500",
-    text: "text-pink-500",
-  },
+	blue: {
+		bg: "bg-blue-7",
+		stroke: "stroke-blue-7",
+		fill: "fill-blue-7",
+		text: "text-blue-7",
+	},
+	emerald: {
+		bg: "bg-green-7",
+		stroke: "stroke-green-7",
+		fill: "fill-green-7",
+		text: "text-green-7",
+	},
+	violet: {
+		bg: "bg-purple-7",
+		stroke: "stroke-purple-7",
+		fill: "fill-purple-7",
+		text: "text-purple-7",
+	},
+	amber: {
+		bg: "bg-amber-7",
+		stroke: "stroke-amber-7",
+		fill: "fill-amber-7",
+		text: "text-amber-7",
+	},
+	gray: {
+		bg: "bg-gray-5",
+		stroke: "stroke-gray-5",
+		fill: "fill-gray-5",
+		text: "text-gray-5",
+	},
+	cyan: {
+		bg: "bg-teal-7",
+		stroke: "stroke-teal-7",
+		fill: "fill-teal-7",
+		text: "text-teal-7",
+	},
+	indigo: {
+		bg: "bg-brand",
+		stroke: "stroke-brand",
+		fill: "fill-brand",
+		text: "text-brand",
+	},
+	pink: {
+		bg: "bg-pink-7",
+		stroke: "stroke-pink-7",
+		fill: "fill-pink-7",
+		text: "text-pink-7",
+	},
 } as const satisfies {
-  [color: string]: {
-    [key in ColorUtility]: string
-  }
-}
+	[color: string]: {
+		[key in ColorUtility]: string;
+	};
+};
 
 export type AvailableChartColorsKeys = keyof typeof chartColors
 

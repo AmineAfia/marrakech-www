@@ -6,11 +6,11 @@ import { Divider } from "@/components/Divider"
 import { Input } from "@/components/Input"
 import { Label } from "@/components/Label"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/Select"
 import { RiExternalLinkLine } from "@remixicon/react"
 
@@ -26,11 +26,11 @@ export default function General() {
               <div>
                 <h2
                   id="personal-information"
-                  className="scroll-mt-10 font-semibold text-gray-900 dark:text-gray-50"
+                  className="scroll-mt-10 font-semibold text-fg"
                 >
                   Personal information
                 </h2>
-                <p className="mt-1 text-sm leading-6 text-gray-500">
+                <p className="mt-1 text-sm leading-6 text-fg-muted">
                   Manage your personal information and role.
                 </p>
               </div>
@@ -132,11 +132,11 @@ export default function General() {
               <div>
                 <h2
                   id="notification-settings"
-                  className="scroll-mt-10 font-semibold text-gray-900 dark:text-gray-50"
+                  className="scroll-mt-10 font-semibold text-fg"
                 >
                   Notification settings
                 </h2>
-                <p className="mt-1 text-sm leading-6 text-gray-500">
+                <p className="mt-1 text-sm leading-6 text-fg-muted">
                   Configure the types of notifications you want to receive.
                 </p>
               </div>
@@ -145,7 +145,7 @@ export default function General() {
                   <legend className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     Team
                   </legend>
-                  <p className="mt-1 text-sm leading-6 text-gray-500">
+                  <p className="mt-1 text-sm leading-6 text-fg-muted">
                     Configure the types of team alerts you want to receive.
                   </p>
                   <ul
@@ -172,7 +172,7 @@ export default function General() {
                   <legend className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     Usage
                   </legend>
-                  <p className="mt-1 text-sm leading-6 text-gray-500">
+                  <p className="mt-1 text-sm leading-6 text-fg-muted">
                     Configure the types of usage alerts you want to receive.
                   </p>
                   <ul
@@ -222,11 +222,11 @@ export default function General() {
               <div>
                 <h2
                   id="danger-zone"
-                  className="scroll-mt-10 font-semibold text-gray-900 dark:text-gray-50"
+                  className="scroll-mt-10 font-semibold text-fg"
                 >
                   Danger zone
                 </h2>
-                <p className="mt-1 text-sm leading-6 text-gray-500">
+                <p className="mt-1 text-sm leading-6 text-fg-muted">
                   Manage general workspace. Contact system admin for more
                   information.{" "}
                   <a

@@ -60,9 +60,9 @@ const DialogContent = React.forwardRef<
             // base
             "fixed left-1/2 top-1/2 z-50 w-[95vw] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-md border p-6 shadow-lg",
             // border color
-            "border-gray-200 dark:border-gray-900",
+            "border-border",
             // background color
-            "bg-white dark:bg-[#090E1A]",
+            "bg-surface",
             // transition
             "data-[state=open]:animate-dialogContentShow",
             focusRing,
@@ -96,7 +96,7 @@ const DialogTitle = React.forwardRef<
       // base
       "text-lg font-semibold",
       // text color
-      "text-gray-900 dark:text-gray-50",
+      "text-fg",
       className,
     )}
     {...props}
@@ -112,7 +112,7 @@ const DialogDescription = React.forwardRef<
   return (
     <DialogPrimitives.Description
       ref={forwardedRef}
-      className={cx("text-gray-500 dark:text-gray-500", className)}
+      className={cx("text-fg-muted", className)}
       {...props}
     />
   )
@@ -138,12 +138,13 @@ const DialogFooter = ({
 DialogFooter.displayName = "DialogFooter"
 
 export {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
 }
+

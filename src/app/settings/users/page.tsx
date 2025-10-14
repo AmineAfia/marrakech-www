@@ -2,17 +2,17 @@
 
 import { Button } from "@/components/Button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/components/Dropdown"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/Select"
 import { Tooltip } from "@/components/Tooltip"
 import { ModalAddUser } from "@/components/ui/settings/ModalAddUser"
@@ -27,11 +27,11 @@ export default function Users() {
           <div>
             <h3
               id="existing-users"
-              className="scroll-mt-10 font-semibold text-gray-900 dark:text-gray-50"
+              className="scroll-mt-10 font-semibold text-fg"
             >
               Users
             </h3>
-            <p className="text-sm leading-6 text-gray-500">
+            <p className="text-sm leading-6 text-fg-muted">
               Workspace administrators can add, manage, and remove users.
             </p>
           </div>
@@ -44,7 +44,7 @@ export default function Users() {
         </div>
         <ul
           role="list"
-          className="mt-6 divide-y divide-gray-200 dark:divide-gray-800"
+          className="mt-6 divide-y divide-border"
         >
           {users.map((user) => (
             <li
@@ -154,7 +154,7 @@ export default function Users() {
         </h2>
         <ul
           role="list"
-          className="mt-6 divide-y divide-gray-200 dark:divide-gray-800"
+          className="mt-6 divide-y divide-border"
         >
           {invitedUsers.map((user) => (
             <li

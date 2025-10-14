@@ -1,7 +1,7 @@
 // Tremor Raw ProgressBar [v0.0.1]
 
 import React from "react"
-import { tv, type VariantProps } from "tailwind-variants"
+import { type VariantProps, tv } from "tailwind-variants"
 
 import { cx } from "@/lib/utils"
 
@@ -13,24 +13,24 @@ const progressBarVariants = tv({
   variants: {
     variant: {
       default: {
-        background: "bg-indigo-100 dark:bg-indigo-500/30",
-        bar: "bg-indigo-600 dark:bg-indigo-500",
+        background: "bg-blue-1",
+        bar: "bg-brand",
       },
       neutral: {
-        background: "bg-gray-200 dark:bg-gray-500/40",
-        bar: "bg-gray-500 dark:bg-gray-500",
+        background: "bg-gray-2",
+        bar: "bg-gray-5",
       },
       warning: {
-        background: "bg-yellow-200 dark:bg-yellow-500/30",
-        bar: "bg-yellow-500 dark:bg-yellow-500",
+        background: "bg-amber-1",
+        bar: "bg-amber-7",
       },
       error: {
-        background: "bg-red-200 dark:bg-red-500/30",
-        bar: "bg-red-500 dark:bg-red-500",
+        background: "bg-red-1",
+        bar: "bg-danger",
       },
       success: {
-        background: "bg-emerald-200 dark:bg-emerald-500/30",
-        bar: "bg-emerald-500 dark:bg-emerald-500",
+        background: "bg-green-1",
+        bar: "bg-success",
       },
     },
   },

@@ -1,29 +1,29 @@
 import { Badge } from "@/components/Badge"
 import { Button } from "@/components/Button"
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/Dialog"
 import { DropdownMenuItem } from "@/components/Dropdown"
 import { Input } from "@/components/Input"
 import { Label } from "@/components/Label"
 import {
-  RadioCardGroup,
-  RadioCardGroupIndicator,
-  RadioCardItem,
+    RadioCardGroup,
+    RadioCardGroupIndicator,
+    RadioCardItem,
 } from "@/components/RadioCard"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/Select"
 
 export const databases: {
@@ -140,7 +140,7 @@ export function ModalAddWorkspace({
                       <SelectItem value="us-west-01">us-west-01</SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="mt-2 text-xs text-gray-500">
+                  <p className="mt-2 text-xs text-fg-muted">
                     For best performance, choose a region closest to your
                     application.
                   </p>
@@ -169,7 +169,7 @@ export function ModalAddWorkspace({
                           ) : (
                             <span>{database.label}</span>
                           )}
-                          <p className="mt-1 text-xs text-gray-500">
+                          <p className="mt-1 text-xs text-fg-muted">
                             1/8 vCPU, 1 GB RAM
                           </p>
                         </div>

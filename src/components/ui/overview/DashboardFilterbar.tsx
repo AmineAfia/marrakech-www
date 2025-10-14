@@ -1,24 +1,24 @@
 "use client"
 
 import {
-  Select,
-  SelectContent,
-  SelectItemPeriod,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItemPeriod,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/Select"
 
 import { Label } from "@/components/Label"
 
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/Dialog"
 
 import { PeriodValue } from "@/app/(main)/overview/page"
@@ -133,7 +133,7 @@ export function Filterbar({
           fromDate={minDate}
           align="start"
         />
-        <span className="hidden text-sm font-medium text-gray-500 sm:block">
+        <span className="hidden text-sm font-medium text-fg-muted sm:block">
           compared to
         </span>
         <Select
@@ -189,7 +189,7 @@ export function Filterbar({
                 <Label
                   htmlFor={category.title}
                   key={category.title}
-                  className="relative cursor-pointer rounded-md border border-gray-200 p-4 shadow-sm dark:border-gray-800"
+                  className="relative cursor-pointer rounded-md border border-border p-4 shadow-sm"
                 >
                   <Checkbox
                     id={category.title}

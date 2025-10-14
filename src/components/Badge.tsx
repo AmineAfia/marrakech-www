@@ -1,7 +1,7 @@
 // Tremor Raw Badge [v0.0.0]
 
 import React from "react"
-import { tv, type VariantProps } from "tailwind-variants"
+import { type VariantProps, tv } from "tailwind-variants"
 
 import { cx } from "@/lib/utils"
 
@@ -12,24 +12,19 @@ const badgeVariants = tv({
   variants: {
     variant: {
       default: [
-        "bg-indigo-50 text-indigo-800 ring-indigo-500/30",
-        "dark:bg-indigo-400/10 dark:text-indigo-400 dark:ring-indigo-400/30",
+        "bg-blue-1 text-blue-9 ring-blue-7/30",
       ],
       neutral: [
-        "bg-gray-50 text-gray-700 ring-gray-500/30",
-        "dark:bg-gray-400/10 dark:text-gray-300 dark:ring-gray-400/20",
+        "bg-gray-1 text-gray-9 ring-gray-5/30",
       ],
       success: [
-        "bg-emerald-50 text-emerald-800 ring-emerald-600/30",
-        "dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-emerald-400/20",
+        "bg-green-1 text-green-9 ring-green-7/30",
       ],
       error: [
-        "bg-red-50 text-red-800 ring-red-600/20",
-        "dark:bg-red-400/10 dark:text-red-400 dark:ring-red-400/20",
+        "bg-red-1 text-red-9 ring-red-7/30",
       ],
       warning: [
-        "bg-yellow-50 text-yellow-800 ring-yellow-600/30",
-        "dark:bg-yellow-400/10 dark:text-yellow-500 dark:ring-yellow-400/20",
+        "bg-amber-1 text-amber-9 ring-amber-7/30",
       ],
     },
   },

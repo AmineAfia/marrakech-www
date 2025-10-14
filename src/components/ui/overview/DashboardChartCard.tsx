@@ -5,10 +5,10 @@ import { overviews } from "@/data/overview-data"
 import { OverviewData } from "@/data/schema"
 import { cx, formatters, percentageFormatter } from "@/lib/utils"
 import {
-  eachDayOfInterval,
-  formatDate,
-  interval,
-  isWithinInterval,
+    eachDayOfInterval,
+    formatDate,
+    interval,
+    isWithinInterval,
 } from "date-fns"
 import { DateRange } from "react-day-picker"
 import { getPeriod } from "./DashboardFilterbar"
@@ -121,7 +121,7 @@ export function ChartCard({
     <div className={cx("transition")}>
       <div className="flex items-center justify-between gap-x-2">
         <div className="flex items-center gap-x-2">
-          <dt className="font-bold text-gray-900 sm:text-sm dark:text-gray-50">
+          <dt className="font-bold text-fg sm:text-sm">
             {title}
           </dt>
           {selectedPeriod !== "no-comparison" && (
@@ -132,11 +132,11 @@ export function ChartCard({
         </div>
       </div>
       <div className="mt-2 flex items-baseline justify-between">
-        <dd className="text-xl text-gray-900 dark:text-gray-50">
+        <dd className="text-xl text-fg">
           {formatter(value)}
         </dd>
         {selectedPeriod !== "no-comparison" && (
-          <dd className="text-sm text-gray-500">
+          <dd className="text-sm text-fg-muted">
             from {formatter(previousValue)}
           </dd>
         )}
