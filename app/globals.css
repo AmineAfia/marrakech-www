@@ -30,6 +30,14 @@
 	--chart-3: hsl(197 37% 24%);
 	--chart-4: hsl(43 74% 66%);
 	--chart-5: hsl(27 87% 67%);
+	--sidebar: hsl(0 0% 100%);
+	--sidebar-foreground: hsl(20 14.3% 4.1%);
+	--sidebar-primary: hsl(20 14.3% 4.1%);
+	--sidebar-primary-foreground: hsl(0 0% 100%);
+	--sidebar-accent: hsl(60 4.8% 95.9%);
+	--sidebar-accent-foreground: hsl(20 14.3% 4.1%);
+	--sidebar-border: hsl(20 5.9% 90%);
+	--sidebar-ring: hsl(20 14.3% 4.1%);
 }
 
 .dark {
@@ -57,6 +65,14 @@
 	--chart-3: hsl(30 80% 55%);
 	--chart-4: hsl(280 65% 60%);
 	--chart-5: hsl(340 75% 55%);
+	--sidebar: hsl(0 0% 0%);
+	--sidebar-foreground: hsl(60 9.1% 97.8%);
+	--sidebar-primary: hsl(60 9.1% 97.8%);
+	--sidebar-primary-foreground: hsl(0 0% 0%);
+	--sidebar-accent: hsl(12 6.5% 15.1%);
+	--sidebar-accent-foreground: hsl(60 9.1% 97.8%);
+	--sidebar-border: hsl(12 6.5% 15.1%);
+	--sidebar-ring: hsl(60 9.1% 97.8%);
 }
 
 @theme inline {
@@ -115,4 +131,13 @@
 
 .no-visible-scrollbar::-webkit-scrollbar {
 	display: none;
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
 }

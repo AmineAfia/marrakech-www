@@ -181,7 +181,7 @@ export default function AdminDashboard() {
 	};
 
 	return (
-		<div className="container mx-auto p-4 space-y-8">
+		<div className="space-y-8">
 			<Toaster richColors />
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between">

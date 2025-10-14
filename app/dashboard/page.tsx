@@ -25,20 +25,18 @@ export default async function DashboardPage() {
 			throw redirect("/sign-in");
 		});
 	return (
-		<div className="w-full">
-			<div className="flex gap-4 flex-col">
-				<AccountSwitcher
-					sessions={JSON.parse(JSON.stringify(deviceSessions))}
-				/>
-				<UserCard
-					session={JSON.parse(JSON.stringify(session))}
-					activeSessions={JSON.parse(JSON.stringify(activeSessions))}
-				/>
-				<OrganizationCard
-					session={JSON.parse(JSON.stringify(session))}
-					activeOrganization={JSON.parse(JSON.stringify(organization))}
-				/>
-			</div>
+		<div className="flex gap-4 flex-col">
+			<AccountSwitcher
+				sessions={JSON.parse(JSON.stringify(deviceSessions))}
+			/>
+			<UserCard
+				session={JSON.parse(JSON.stringify(session))}
+				activeSessions={JSON.parse(JSON.stringify(activeSessions))}
+			/>
+			<OrganizationCard
+				session={JSON.parse(JSON.stringify(session))}
+				activeOrganization={JSON.parse(JSON.stringify(organization))}
+			/>
 		</div>
 	);
 }
