@@ -1,42 +1,8 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import UserCard from "./user-card";
-import { OrganizationCard } from "./organization-card";
-import AccountSwitcher from "@/components/account-switch";
-
-export default async function DashboardPage() {
-	const [session, activeSessions, deviceSessions, organization] =
-		await Promise.all([
-			auth.api.getSession({
-				headers: await headers(),
-			}),
-			auth.api.listSessions({
-				headers: await headers(),
-			}),
-			auth.api.listDeviceSessions({
-				headers: await headers(),
-			}),
-			auth.api.getFullOrganization({
-				headers: await headers(),
-			}),
-		]).catch((e) => {
-			console.log(e);
-			throw redirect("/sign-in");
-		});
-	return (
-		<div className="flex gap-4 flex-col">
-			<AccountSwitcher
-				sessions={JSON.parse(JSON.stringify(deviceSessions))}
-			/>
-			<UserCard
-				session={JSON.parse(JSON.stringify(session))}
-				activeSessions={JSON.parse(JSON.stringify(activeSessions))}
-			/>
-			<OrganizationCard
-				session={JSON.parse(JSON.stringify(session))}
-				activeOrganization={JSON.parse(JSON.stringify(organization))}
-			/>
-		</div>
-	);
+export default function DashboardPage() {
+  return (
+    <div className="flex flex-col gap-4">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <p className="text-muted-foreground">Welcome to your dashboard</p>
+    </div>
+  )
 }

@@ -27,6 +27,11 @@ const PUBLIC_ROUTES = [
 // Routes that should show sidebar even if they might be partially public
 const PROTECTED_ROUTES = [
   '/dashboard',
+  '/agents',
+  '/llms',
+  '/prompt-management',
+  '/api-keys',
+  '/settings',
   '/admin',
   '/device',
 ]
@@ -71,8 +76,10 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
           <AppSidebar />
           <SidebarInset className="relative z-10">
             <SidebarHeader />
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-              {children}
+            <div className="flex flex-1 flex-col gap-4 pt-0">
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+                {children}
+              </div>
             </div>
           </SidebarInset>
         </SidebarProvider>

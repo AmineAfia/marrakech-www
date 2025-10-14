@@ -7,6 +7,10 @@ import {
   Shield,
   Users,
   Building2,
+  Bot,
+  Brain,
+  FileText,
+  Key,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -39,6 +43,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: LayoutDashboard,
         isActive: true,
       },
+      {
+        title: "Agents",
+        url: "/agents",
+        icon: Bot,
+        isActive: false,
+      },
+      {
+        title: "LLMs",
+        url: "/llms",
+        icon: Brain,
+        isActive: false,
+      },
+      {
+        title: "Prompt Management",
+        url: "/prompt-management",
+        icon: FileText,
+        isActive: false,
+      },
+      {
+        title: "API Keys",
+        url: "/api-keys",
+        icon: Key,
+        isActive: false,
+      },
+      {
+        title: "Settings",
+        url: "/settings",
+        icon: Settings2,
+        isActive: false,
+      },
     ]
 
     // Add Admin navigation if user has admin role
@@ -50,13 +84,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: false,
       })
     }
-
-    items.push({
-      title: "Settings",
-      url: "/settings",
-      icon: Settings2,
-      isActive: false,
-    })
 
     return items
   }, [session?.user?.role])
