@@ -1,50 +1,85 @@
-# Tremor – Dashboard
+# Better Auth Demo App
 
-`Dashboard` is a SaaS application template from [Tremor](https://tremor.so). It's built
-using [`Tremor Raw`](https://raw.tremor.so/docs/getting-started/installation)
-and [Next.js](https://nextjs.org).
+Welcome to the Better Auth demo app! This project is built with [Next.js](https://nextjs.org) using [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting started
+## Getting Started
 
-1. Install the dependencies. We recommend using pnpm. If you want to use `npm`,
-   just replace `pnpm` with `npm`.
+Here’s how you can get the app running locally:
+
+### Prerequisites
+
+1. **Clone the repo**:
+
+   ```bash
+   git clone https://github.com/better-auth/better-auth
+   cd better-auth/demo/nextjs
+   ```
+
+2. **Install the dependencies**:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Set up your environment variables**:
+
+   - Rename the `.env.example` file to `.env`:
+
+     ```bash
+     mv .env.example .env
+     ```
+
+   - Open `.env` and fill in the required details. These will include things like API URLs, client IDs, and secrets needed to connect to the Better Auth service.
+
+Make sure `TURSO_DATABASE_URL=your_turso_url` and `TURSO_AUTH_TOKEN=your_turso_token` is set or `USE_MYSQL=true` and `MYSQL_DATABASE_URL=your_mysql_url` is set.
+
+### Start the Development Server
+
+Once everything is set up, start the development server with:
 
 ```bash
-pnpm install
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-2. Then, start the development server:
+The app will be live at [http://localhost:3000](http://localhost:3000). Open it in your browser, and you’re good to go!
 
-```bash
-pnpm run dev
-```
+Feel free to jump in and edit the app by modifying `app/page.tsx`. Any changes you make will update automatically in the browser.
 
-3. Visit [http://localhost:3000](http://localhost:3000) in your browser to view
-   the template.
+## Features
 
-## Notes
+Here’s what this app supports out of the box:
 
-This project uses
-[`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
-automatically optimize and load Inter, a custom Google Font.
+- **[Email & Password](https://www.better-auth.com/docs/basic-usage#email-password)**: Simple and secure authentication.
+- **[Organization / Teams](https://www.better-auth.com/docs/plugins/organization)**: Manage users within organizations or teams.
+- **[Passkeys](https://www.better-auth.com/docs/plugins/passkey)**: Passwordless login using modern authentication standards.
+- **[Multi-Factor Authentication (MFA)](https://www.better-auth.com/docs/plugins/2fa)**: Add an extra layer of security.
+- **[Password Reset](https://www.better-auth.com/docs/concepts/email#password-reset-email)**: Let users reset their passwords if they forget them.
+- **[Email Verification](https://www.better-auth.com/docs/concepts/email#email-verification)**: Ensure users verify their email addresses.
+- **[Roles & Permissions](https://www.better-auth.com/docs/plugins/admin#role)**: Define and manage who can do what.
+- **[Rate Limiting](https://www.better-auth.com/docs/concepts/rate-limit)**: Protect your app from abuse with smart limits.
+- **[Session Management](https://www.better-auth.com/docs/concepts/session-management)**: Handle user sessions seamlessly.
+- **[Stripe Plugin](https://www.better-auth.com/docs/plugins/stripe)**: Integrate Stripe for customer management, subscriptions, and webhooks.
 
-This project uses
-[`Tremor Raw`](https://raw.tremor.so/docs/getting-started/installation)
-components for the UI.
+## Learn More
 
-## License
+Here are some helpful links if you want to dive deeper:
 
-This site template is a commercial product and is licensed under the
-[Tremor License](https://blocks.tremor.so/license).
+- [Better Auth Documentation](https://better-auth.com/docs) - Everything you need to know to integrate Better Auth.
+- [Next.js Documentation](https://nextjs.org/docs) - Learn about the framework we used to build this app.
+- [Learn Next.js](https://nextjs.org/learn) - A hands-on tutorial for Next.js.
 
-## Learn more
+---
 
-For a deeper understanding of the technologies used in this template, check out
-the resources listed below:
+If you run into issues or have suggestions, feel free to open an issue or submit a pull request on the [GitHub repo](https://github.com/better-auth/better-auth).
 
-- [Tremor Raw](https://raw.tremor.so) - Tremor Raw documentation
-- [Tailwind CSS](https://tailwindcss.com) - A utility-first CSS framework
-- [Next.js](https://nextjs.org/docs) - Next.js documentation
-- [Radix UI](https://www.radix-ui.com) - Radix UI Website
-- [Recharts](https://recharts.org) - Recharts documentation and website
-- [Tanstack](https://tanstack.com/table/latest) - TanStack table documentation
+Happy coding!

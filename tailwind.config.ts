@@ -1,264 +1,128 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
-	darkMode: "selector",
-	content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+const svgToDataUri = require("mini-svg-data-uri");
+
+const colors = require("tailwindcss/colors");
+const {
+	default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
+
+const config = {
+	darkMode: ["class", '[data-theme="dark"]'],
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
+	],
+	prefix: "",
 	theme: {
+		container: {
+			center: true,
+			padding: "2rem",
+			screens: {
+				"2xl": "1400px",
+			},
+		},
 		extend: {
 			colors: {
-				// Semantic color aliases
-				bg: "var(--color-bg)",
-				"bg-muted": "var(--color-bg-muted)",
-				surface: "var(--color-surface)",
-				"surface-hover": "var(--color-surface-hover)",
-				"surface-active": "var(--color-surface-active)",
-				border: "var(--color-border)",
-				"border-hover": "var(--color-border-hover)",
-				"border-strong": "var(--color-border-strong)",
-				"surface-contrast": "var(--color-surface-contrast)",
-				"surface-contrast-hover": "var(--color-surface-contrast-hover)",
-				"fg-muted": "var(--color-fg-muted)",
-				fg: "var(--color-fg)",
-				info: "var(--color-info)",
-				success: "var(--color-success)",
-				warning: "var(--color-warning)",
-				danger: "var(--color-danger)",
-				brand: "var(--color-brand)",
-
-				// Design system color scales
-				gray: {
-					1: "var(--ds-gray-1)",
-					2: "var(--ds-gray-2)",
-					3: "var(--ds-gray-3)",
-					4: "var(--ds-gray-4)",
-					5: "var(--ds-gray-5)",
-					6: "var(--ds-gray-6)",
-					7: "var(--ds-gray-7)",
-					8: "var(--ds-gray-8)",
-					9: "var(--ds-gray-9)",
-					10: "var(--ds-gray-10)",
+				border: "var(--border)",
+				input: "var(--input)",
+				ring: "var(--ring)",
+				background: "var(--background)",
+				foreground: "var(--foreground)",
+				primary: {
+					DEFAULT: "var(--primary)",
+					foreground: "var(--primary-foreground)",
 				},
-				"gray-alpha": {
-					1: "var(--ds-gray-alpha-1)",
-					2: "var(--ds-gray-alpha-2)",
-					3: "var(--ds-gray-alpha-3)",
-					4: "var(--ds-gray-alpha-4)",
-					5: "var(--ds-gray-alpha-5)",
-					6: "var(--ds-gray-alpha-6)",
-					7: "var(--ds-gray-alpha-7)",
-					8: "var(--ds-gray-alpha-8)",
-					9: "var(--ds-gray-alpha-9)",
-					10: "var(--ds-gray-alpha-10)",
+				secondary: {
+					DEFAULT: "var(--secondary)",
+					foreground: "var(--secondary-foreground)",
 				},
-				blue: {
-					1: "var(--ds-blue-1)",
-					2: "var(--ds-blue-2)",
-					3: "var(--ds-blue-3)",
-					4: "var(--ds-blue-4)",
-					5: "var(--ds-blue-5)",
-					6: "var(--ds-blue-6)",
-					7: "var(--ds-blue-7)",
-					8: "var(--ds-blue-8)",
-					9: "var(--ds-blue-9)",
-					10: "var(--ds-blue-10)",
+				destructive: {
+					DEFAULT: "var(--destructive)",
+					foreground: "var(--destructive-foreground)",
 				},
-				red: {
-					1: "var(--ds-red-1)",
-					2: "var(--ds-red-2)",
-					3: "var(--ds-red-3)",
-					4: "var(--ds-red-4)",
-					5: "var(--ds-red-5)",
-					6: "var(--ds-red-6)",
-					7: "var(--ds-red-7)",
-					8: "var(--ds-red-8)",
-					9: "var(--ds-red-9)",
-					10: "var(--ds-red-10)",
+				muted: {
+					DEFAULT: "var(--muted)",
+					foreground: "var(--muted-foreground)",
 				},
-				amber: {
-					1: "var(--ds-amber-1)",
-					2: "var(--ds-amber-2)",
-					3: "var(--ds-amber-3)",
-					4: "var(--ds-amber-4)",
-					5: "var(--ds-amber-5)",
-					6: "var(--ds-amber-6)",
-					7: "var(--ds-amber-7)",
-					8: "var(--ds-amber-8)",
-					9: "var(--ds-amber-9)",
-					10: "var(--ds-amber-10)",
+				accent: {
+					DEFAULT: "var(--accent)",
+					foreground: "var(--accent-foreground)",
 				},
-				green: {
-					1: "var(--ds-green-1)",
-					2: "var(--ds-green-2)",
-					3: "var(--ds-green-3)",
-					4: "var(--ds-green-4)",
-					5: "var(--ds-green-5)",
-					6: "var(--ds-green-6)",
-					7: "var(--ds-green-7)",
-					8: "var(--ds-green-8)",
-					9: "var(--ds-green-9)",
-					10: "var(--ds-green-10)",
+				popover: {
+					DEFAULT: "var(--popover)",
+					foreground: "var(--popover-foreground)",
 				},
-				teal: {
-					1: "var(--ds-teal-1)",
-					2: "var(--ds-teal-2)",
-					3: "var(--ds-teal-3)",
-					4: "var(--ds-teal-4)",
-					5: "var(--ds-teal-5)",
-					6: "var(--ds-teal-6)",
-					7: "var(--ds-teal-7)",
-					8: "var(--ds-teal-8)",
-					9: "var(--ds-teal-9)",
-					10: "var(--ds-teal-10)",
+				card: {
+					DEFAULT: "var(--card)",
+					foreground: "var(--card-foreground)",
 				},
-				purple: {
-					1: "var(--ds-purple-1)",
-					2: "var(--ds-purple-2)",
-					3: "var(--ds-purple-3)",
-					4: "var(--ds-purple-4)",
-					5: "var(--ds-purple-5)",
-					6: "var(--ds-purple-6)",
-					7: "var(--ds-purple-7)",
-					8: "var(--ds-purple-8)",
-					9: "var(--ds-purple-9)",
-					10: "var(--ds-purple-10)",
-				},
-				pink: {
-					1: "var(--ds-pink-1)",
-					2: "var(--ds-pink-2)",
-					3: "var(--ds-pink-3)",
-					4: "var(--ds-pink-4)",
-					5: "var(--ds-pink-5)",
-					6: "var(--ds-pink-6)",
-					7: "var(--ds-pink-7)",
-					8: "var(--ds-pink-8)",
-					9: "var(--ds-pink-9)",
-					10: "var(--ds-pink-10)",
-				},
-			},
-			fontSize: {
-				xs: ["var(--text-xs)", { lineHeight: "var(--text-xs-line-height)" }],
-				sm: ["var(--text-sm)", { lineHeight: "var(--text-sm-line-height)" }],
-				base: [
-					"var(--text-base)",
-					{ lineHeight: "var(--text-base-line-height)" },
-				],
-				lg: ["var(--text-lg)", { lineHeight: "var(--text-lg-line-height)" }],
-				xl: ["var(--text-xl)", { lineHeight: "var(--text-xl-line-height)" }],
-				"2xl": [
-					"var(--text-2xl)",
-					{ lineHeight: "var(--text-2xl-line-height)" },
-				],
-				"3xl": [
-					"var(--text-3xl)",
-					{ lineHeight: "var(--text-3xl-line-height)" },
-				],
-				"4xl": [
-					"var(--text-4xl)",
-					{ lineHeight: "var(--text-4xl-line-height)" },
-				],
-				"5xl": [
-					"var(--text-5xl)",
-					{ lineHeight: "var(--text-5xl-line-height)" },
-				],
-			},
-			fontFamily: {
-				sans: "var(--font-sans)",
-				mono: "var(--font-mono)",
-			},
-			fontWeight: {
-				normal: "var(--font-weight-normal)",
-				medium: "var(--font-weight-medium)",
-				semibold: "var(--font-weight-semibold)",
-				bold: "var(--font-weight-bold)",
-			},
-			letterSpacing: {
-				tighter: "var(--tracking-tighter)",
-				tight: "var(--tracking-tight)",
-				wide: "var(--tracking-wide)",
-				widest: "var(--tracking-widest)",
-			},
-			spacing: {
-				unit: "var(--spacing-unit)",
 			},
 			borderRadius: {
-				xs: "var(--radius-xs)",
-				sm: "var(--radius-sm)",
-				md: "var(--radius-md)",
-				lg: "var(--radius-lg)",
-				xl: "var(--radius-xl)",
-				"2xl": "var(--radius-2xl)",
-				full: "var(--radius-full)",
-			},
-			transitionDuration: {
-				75: "var(--duration-75)",
-				100: "var(--duration-100)",
-				150: "var(--duration-150)",
-				200: "var(--duration-200)",
-				300: "var(--duration-300)",
-				500: "var(--duration-500)",
-				700: "var(--duration-700)",
-				1000: "var(--duration-1000)",
-			},
-			transitionTimingFunction: {
-				in: "var(--ease-in)",
-				out: "var(--ease-out)",
-				"in-out": "var(--ease-in-out)",
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)",
 			},
 			keyframes: {
-				hide: {
-					from: { opacity: "1" },
-					to: { opacity: "0" },
+				"accordion-down": {
+					from: { height: "0" },
+					to: { height: "var(--radix-accordion-content-height)" },
 				},
-				slideDownAndFade: {
-					from: { opacity: "0", transform: "translateY(-6px)" },
-					to: { opacity: "1", transform: "translateY(0)" },
-				},
-				slideLeftAndFade: {
-					from: { opacity: "0", transform: "translateX(6px)" },
-					to: { opacity: "1", transform: "translateX(0)" },
-				},
-				slideUpAndFade: {
-					from: { opacity: "0", transform: "translateY(6px)" },
-					to: { opacity: "1", transform: "translateY(0)" },
-				},
-				slideRightAndFade: {
-					from: { opacity: "0", transform: "translateX(-6px)" },
-					to: { opacity: "1", transform: "translateX(0)" },
-				},
-				dialogOverlayShow: {
-					from: { opacity: "0" },
-					to: { opacity: "1" },
-				},
-				dialogContentShow: {
-					from: {
-						opacity: "0",
-						transform: "translate(-50%, -45%) scale(0.95)",
-					},
-					to: { opacity: "1", transform: "translate(-50%, -50%) scale(1)" },
-				},
-				drawerSlideLeftAndFade: {
-					from: { opacity: "0", transform: "translateX(50%)" },
-					to: { opacity: "1", transform: "translateX(0)" },
+				"accordion-up": {
+					from: { height: "var(--radix-accordion-content-height)" },
+					to: { height: "0" },
 				},
 			},
 			animation: {
-				hide: "hide 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				slideDownAndFade:
-					"slideDownAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				slideLeftAndFade:
-					"slideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				slideUpAndFade: "slideUpAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				slideRightAndFade:
-					"slideRightAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				drawerSlideLeftAndFade:
-					"drawerSlideLeftAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				dialogOverlayShow:
-					"dialogOverlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
-				dialogContentShow:
-					"dialogContentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
+				"accordion-down": "accordion-down 0.2s ease-out",
+				"accordion-up": "accordion-up 0.2s ease-out",
+			},
+			boxShadow: {
+				input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
 			},
 		},
 	},
-	plugins: [require("@tailwindcss/forms")],
-};
-export default config
+	plugins: [
+		addVariablesForColors,
+		function ({ matchUtilities, theme }: any) {
+			matchUtilities(
+				{
+					"bg-grid": (value: any) => ({
+						backgroundImage: `url("${svgToDataUri(
+							`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`,
+						)}")`,
+					}),
+					"bg-grid-small": (value: any) => ({
+						backgroundImage: `url("${svgToDataUri(
+							`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="8" height="8" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`,
+						)}")`,
+					}),
+					"bg-dot": (value: any) => ({
+						backgroundImage: `url("${svgToDataUri(
+							`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`,
+						)}")`,
+					}),
+				},
+				{
+					values: flattenColorPalette(theme("backgroundColor")),
+					type: "color",
+				},
+			);
+		},
+	],
+} satisfies Config;
+
+function addVariablesForColors({ addBase, theme }: any) {
+	let allColors = flattenColorPalette(theme("colors"));
+	let newVars = Object.fromEntries(
+		Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
+	);
+
+	addBase({
+		":root": newVars,
+	});
+}
+
+export default config;
