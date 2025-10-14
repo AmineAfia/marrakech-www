@@ -57,10 +57,10 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="prompt1" stackId="a" fill="var(--color-prompt1)" radius={4} />
-            <Bar dataKey="prompt2" stackId="a" fill="var(--color-prompt2)" radius={4} />
-            <Bar dataKey="prompt3" stackId="a" fill="var(--color-prompt3)" radius={4} />
-            <Bar dataKey="prompt4" stackId="a" fill="var(--color-prompt4)" radius={4} />
+            <Bar dataKey="prompt1" stackId="a" fill="var(--color-prompt1)" radius={0} />
+            <Bar dataKey="prompt2" stackId="a" fill="var(--color-prompt2)" radius={0} />
+            <Bar dataKey="prompt3" stackId="a" fill="var(--color-prompt3)" radius={0} />
+            <Bar dataKey="prompt4" stackId="a" fill="var(--color-prompt4)" radius={0} />
           </BarChart>
         </ChartContainer>
       </CardContent>

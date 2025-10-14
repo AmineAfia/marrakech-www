@@ -60,10 +60,10 @@ export function TokenUsageChart({ timeRange }: TokenUsageChartProps) {
               formatter={(value) => [value.toLocaleString(), "Tokens"]}
             />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="tokens1" stackId="a" fill="var(--color-tokens1)" radius={4} />
-            <Bar dataKey="tokens2" stackId="a" fill="var(--color-tokens2)" radius={4} />
-            <Bar dataKey="tokens3" stackId="a" fill="var(--color-tokens3)" radius={4} />
-            <Bar dataKey="tokens4" stackId="a" fill="var(--color-tokens4)" radius={4} />
+            <Bar dataKey="tokens1" stackId="a" fill="var(--color-tokens1)" radius={0} />
+            <Bar dataKey="tokens2" stackId="a" fill="var(--color-tokens2)" radius={0} />
+            <Bar dataKey="tokens3" stackId="a" fill="var(--color-tokens3)" radius={0} />
+            <Bar dataKey="tokens4" stackId="a" fill="var(--color-tokens4)" radius={0} />
           </BarChart>
         </ChartContainer>
       </CardContent>

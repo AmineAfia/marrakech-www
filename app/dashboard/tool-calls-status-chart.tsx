@@ -61,11 +61,11 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="success" stackId="a" fill="var(--color-success)" radius={4} />
-            <Bar dataKey="failed" stackId="a" fill="var(--color-failed)" radius={4} />
-            <Bar dataKey="timeout" stackId="a" fill="var(--color-timeout)" radius={4} />
-            <Bar dataKey="rateLimited" stackId="a" fill="var(--color-rateLimited)" radius={4} />
-            <Bar dataKey="error" stackId="a" fill="var(--color-error)" radius={4} />
+            <Bar dataKey="success" stackId="a" fill="var(--color-success)" radius={0} />
+            <Bar dataKey="failed" stackId="a" fill="var(--color-failed)" radius={0} />
+            <Bar dataKey="timeout" stackId="a" fill="var(--color-timeout)" radius={0} />
+            <Bar dataKey="rateLimited" stackId="a" fill="var(--color-rateLimited)" radius={0} />
+            <Bar dataKey="error" stackId="a" fill="var(--color-error)" radius={0} />
           </BarChart>
         </ChartContainer>
       </CardContent>
