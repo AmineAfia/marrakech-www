@@ -11,6 +11,7 @@ import {
 	customSession,
 	deviceAuthorization,
 	lastLoginMethod,
+	apiKey,
 } from "better-auth/plugins";
 import { reactInvitationEmail } from "./email/invitation";
 import { LibsqlDialect } from "@libsql/kysely-libsql";
@@ -21,7 +22,6 @@ import { createPool } from "mysql2/promise";
 import { Pool } from "pg";
 import { nextCookies } from "better-auth/next-js";
 import { passkey } from "better-auth/plugins/passkey";
-
 
 const from = process.env.BETTER_AUTH_EMAIL || "delivered@resend.dev";
 const to = process.env.TEST_EMAIL || "";
@@ -197,7 +197,7 @@ export const auth = betterAuth({
 				async sendOTP({ user, otp }) {
 					await resend.emails.send({
 						from,
-						to: (user as any).email,
+						to: user.email,
 						subject: "Your OTP",
 						html: `Your OTP is ${otp}`,
 					});
@@ -214,6 +214,9 @@ export const auth = betterAuth({
 		oAuthProxy(),
 		nextCookies(),
 		oneTap(),
+		apiKey({
+			enableMetadata: true,
+		}),
 		customSession(async (session) => {
 			return {
 				...session,

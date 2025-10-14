@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import { WrapperWithQuery } from "@/components/wrapper";
 import { ConditionalLayout } from "@/components/conditional-layout";
+import { BetterAuthUIProvider } from "@/components/auth-ui-provider";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
@@ -29,7 +30,9 @@ export default function RootLayout({
 			<body className={`${GeistSans.variable} ${GeistMono.variable} font-sans`}>
 				<ThemeProvider attribute="class" defaultTheme="dark">
 					<WrapperWithQuery>
-						<ConditionalLayout>{children}</ConditionalLayout>
+						<BetterAuthUIProvider>
+							<ConditionalLayout>{children}</ConditionalLayout>
+						</BetterAuthUIProvider>
 					</WrapperWithQuery>
 					<Toaster richColors closeButton />
 				</ThemeProvider>

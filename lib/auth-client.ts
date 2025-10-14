@@ -10,6 +10,7 @@ import {
 	genericOAuthClient,
 	deviceAuthorizationClient,
 	lastLoginMethodClient,
+	apiKeyClient,
 } from "better-auth/client/plugins";
 import { toast } from "sonner";
 import { stripeClient } from "@better-auth/stripe/client";
@@ -26,7 +27,7 @@ export const client = createAuthClient({
 		adminClient(),
 		multiSessionClient(),
 		oneTapClient({
-			clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+			clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
 			promptOptions: {
 				maxAttempts: 1,
 			},
@@ -38,6 +39,7 @@ export const client = createAuthClient({
 		}),
 		deviceAuthorizationClient(),
 		lastLoginMethodClient(),
+		apiKeyClient(),
 	],
 	fetchOptions: {
 		onError(e) {
