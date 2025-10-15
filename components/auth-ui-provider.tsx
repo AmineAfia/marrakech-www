@@ -11,7 +11,7 @@ export function BetterAuthUIProvider({ children }: { children: React.ReactNode }
         prefix: process.env.NODE_ENV === 'production' ? 'pk_live_' : 'pk_test_',
         metadata: {
           environment: process.env.NODE_ENV || 'development',
-          application: 'marrakech-www',
+          application: 'marrakech',
         }
       }}
     >

@@ -25,12 +25,14 @@ export async function POST(request: Request) {
         { status: 401 }
       )
     }
+
+    console.log("data", JSON.stringify(data, null, 2));
     
     return NextResponse.json({
-      success: true,
-      user: data.user,
-      metadata: data.apiKey?.metadata || {}
-    })
+					success: true,
+					user: data.key.userId,
+					metadata: data.key?.metadata || {},
+				});
   } catch (error) {
     console.error('API key validation error:', error)
     return NextResponse.json(
