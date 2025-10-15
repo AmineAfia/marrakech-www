@@ -8,10 +8,10 @@ export function BetterAuthUIProvider({ children }: { children: React.ReactNode }
     <AuthUIProvider
       authClient={client}
       apiKey={{
-        prefix: process.env.NODE_ENV === 'production' ? 'pk_live_' : 'pk_test_',
+        prefix: process.env.NODE_ENV === 'production' ? 'pk_' : 'pk_test_',
         metadata: {
           environment: process.env.NODE_ENV || 'development',
-          application: 'marrakech',
+          application: 'marrakech'
         }
       }}
     >
