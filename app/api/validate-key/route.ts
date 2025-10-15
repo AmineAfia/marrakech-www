@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth'
+import { validateApiKey } from "@/lib/auth";
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -11,33 +11,18 @@ export async function POST(request: Request) {
     )
   }
   
-  try {
-    // Use the correct Better Auth API method
-    const data = await auth.api.verifyApiKey({
-      body: {
-        key: apiKey
-      }
-    })
-    
-    if (!data) {
-      return NextResponse.json(
-        { error: 'Invalid API key' },
-        { status: 401 }
-      )
-    }
-
-    console.log("data", JSON.stringify(data, null, 2));
-    
-    return NextResponse.json({
-					success: true,
-					user: data.key.userId,
-					metadata: data.key?.metadata || {},
-				});
-  } catch (error) {
-    console.error('API key validation error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    )
-  }
+  const result = await validateApiKey(apiKey);
+  
+  if (!result.valid) {
+			return NextResponse.json(
+				{ error: result.error?.message || "Invalid API key" },
+				{ status: 401 },
+			);
+		}
+  
+  return NextResponse.json({
+			success: true,
+			user: result.userId,
+			metadata: result.metadata,
+		});
 }
