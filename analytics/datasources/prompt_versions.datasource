@@ -1,0 +1,14 @@
+DESCRIPTION >
+    Generated from /Users/amine/Projects/solo/marrakech-www/analytics/tmp-seed-data/prompt_versions.ndjson
+
+SCHEMA >
+    account_id String `json:$.account_id`,
+    created_at DateTime `json:$.created_at`,
+    is_active UInt8 `json:$.is_active`,
+    organization_id String `json:$.organization_id`,
+    prompt_id String `json:$.prompt_id`,
+    prompt_text String `json:$.prompt_text`,
+    updated_at DateTime `json:$.updated_at`,
+    user_id String `json:$.user_id`,
+    version String `json:$.version`,
+    version_notes String `json:$.version_notes`

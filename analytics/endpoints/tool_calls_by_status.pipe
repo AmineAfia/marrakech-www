@@ -1,0 +1,19 @@
+NODE endpoint
+SQL >
+    %
+    SELECT 
+        toStartOfMinute(tool_call_timestamp) AS minute,
+        status,
+        count() AS tool_call_count
+    FROM tool_calls
+    WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
+        AND tool_call_timestamp >= CASE 
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '1h' THEN now() - INTERVAL 1 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '24h' THEN now() - INTERVAL 1 DAY
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '7d' THEN now() - INTERVAL 7 DAY
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '30d' THEN now() - INTERVAL 30 DAY
+            ELSE now() - INTERVAL 1 DAY
+        END
+    GROUP BY minute, status
+    ORDER BY minute DESC, tool_call_count DESC
+TYPE ENDPOINT

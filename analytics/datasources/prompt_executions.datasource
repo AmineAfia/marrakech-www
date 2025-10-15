@@ -1,0 +1,21 @@
+DESCRIPTION >
+    Generated from /Users/amine/Projects/solo/marrakech-www/analytics/tmp-seed-data/prompt_executions.ndjson
+
+SCHEMA >
+    account_id String `json:$.account_id`,
+    cost_usd Float32 `json:$.cost_usd`,
+    execution_id String `json:$.execution_id`,
+    execution_time_ms Int32 `json:$.execution_time_ms`,
+    execution_timestamp DateTime `json:$.execution_timestamp`,
+    model String `json:$.model`,
+    organization_id String `json:$.organization_id`,
+    prompt_id String `json:$.prompt_id`,
+    prompt_name String `json:$.prompt_name`,
+    prompt_version String `json:$.prompt_version`,
+    region String `json:$.region`,
+    request_tokens Int32 `json:$.request_tokens`,
+    response_tokens Int32 `json:$.response_tokens`,
+    session_id String `json:$.session_id`,
+    status String `json:$.status`,
+    user_id String `json:$.user_id`,
+    error_message Nullable(String) `json:$.error_message`

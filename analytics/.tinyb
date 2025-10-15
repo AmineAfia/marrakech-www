@@ -1,0 +1,14 @@
+{
+    "host": "https://api.us-east.aws.tinybird.co",
+    "id": "5b40f821-8a5f-4b6f-bfac-5fd7b26da5ae",
+    "name": "marrakech",
+    "scope": "user",
+    "token": "p.eyJ1IjogIjViNDBmODIxLThhNWYtNGI2Zi1iZmFjLTVmZDdiMjZkYTVhZSIsICJpZCI6ICJmYWE0NjI5ZC0yNTEwLTRjNjItOTc3Yi0wOTNlNGIyODFiMjAiLCAiaG9zdCI6ICJ1cy1lYXN0LWF3cyJ9.LmDsCgEh-dYVGkdYMbCs-TpcHQrdpz10PHIFYMu2IEQ",
+    "tokens": {
+        "https://api.us-east.aws.tinybird.co": "p.eyJ1IjogIjViNDBmODIxLThhNWYtNGI2Zi1iZmFjLTVmZDdiMjZkYTVhZSIsICJpZCI6ICJmYWE0NjI5ZC0yNTEwLTRjNjItOTc3Yi0wOTNlNGIyODFiMjAiLCAiaG9zdCI6ICJ1cy1lYXN0LWF3cyJ9.LmDsCgEh-dYVGkdYMbCs-TpcHQrdpz10PHIFYMu2IEQ"
+    },
+    "user_email": "afia.amine@gmail.com",
+    "user_id": "e4ad626a-6057-42be-a3a0-8467b982d0c2",
+    "user_token": "p.eyJ1IjogImU0YWQ2MjZhLTYwNTctNDJiZS1hM2EwLTg0NjdiOTgyZDBjMiIsICJpZCI6ICI3ZjY3NTg3YS0wYWRhLTQ1ZGItOWYyMy1mNGU4ZGNjYjAwNWQiLCAiaG9zdCI6ICJ1cy1lYXN0LWF3cyJ9.saATGEjjmSQZSSwnkKGun8YKsrtCSEJpA2r6Uk_4oUw",
+    "version": "0.0.1.dev304"
+}

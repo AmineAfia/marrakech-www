@@ -1,0 +1,6 @@
+
+NODE endpoint
+SQL >
+    SELECT * from prompt_executions
+TYPE ENDPOINT
+            
