@@ -2,7 +2,7 @@
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-export type TimeRange = "5m" | "15m" | "1h" | "6h" | "12h"
+export type TimeRange = "5m" | "15m" | "1h" | "6h" | "12h" | "24h"
 
 interface TimeRangePickerProps {
   value: TimeRange
@@ -19,6 +19,7 @@ export function TimeRangePicker({ value, onValueChange }: TimeRangePickerProps) 
         <ToggleGroupItem value="1h">Last 1h</ToggleGroupItem>
         <ToggleGroupItem value="6h">Last 6h</ToggleGroupItem>
         <ToggleGroupItem value="12h">Last 12h</ToggleGroupItem>
+        <ToggleGroupItem value="24h">Last 24h</ToggleGroupItem>
       </ToggleGroup>
     </div>
   )

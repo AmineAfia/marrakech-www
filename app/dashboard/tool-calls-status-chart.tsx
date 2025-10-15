@@ -1,10 +1,10 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
-import { generateTimeSeriesData } from "./chart-utils"
 
 const chartConfig = {
   success: {
@@ -34,7 +34,108 @@ interface ToolCallsStatusChartProps {
 }
 
 export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
-  const chartData = generateTimeSeriesData(timeRange)
+  const [chartData, setChartData] = useState<Array<Record<string, string | number>>>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [dynamicChartConfig, setDynamicChartConfig] = useState(chartConfig)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        
+        const response = await fetch(`/api/analytics/tool-calls-by-status?timeframe=${timeRange}`)
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        
+        const result = await response.json()
+        
+        // Transform Tinybird data to chart format
+        const dataMap = new Map<string, Record<string, string | number>>()
+        
+        for (const item of result.data || []) {
+          const timeKey = new Date(item.minute).toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          })
+          
+          if (!dataMap.has(timeKey)) {
+            dataMap.set(timeKey, { time: timeKey })
+          }
+          
+          const timeData = dataMap.get(timeKey)
+          timeData[item.status.toLowerCase()] = item.tool_call_count
+        }
+        
+        const transformedData = Array.from(dataMap.values())
+        setChartData(transformedData)
+        
+        // Update chart config with dynamic statuses
+        const statuses = [...new Set(result.data?.map((item: { status: string }) => item.status.toLowerCase()) || [])]
+        const newConfig: ChartConfig = {}
+        
+        statuses.forEach((status, index) => {
+          const colors = [
+            "hsl(142, 76%, 36%)", // green
+            "hsl(0, 84%, 60%)",   // red
+            "hsl(25, 95%, 53%)",  // orange
+            "hsl(262, 83%, 58%)", // purple
+            "hsl(0, 0%, 45%)"     // gray
+          ]
+          
+          newConfig[status] = {
+            label: status.charAt(0).toUpperCase() + status.slice(1),
+            color: colors[index % colors.length]
+          }
+        })
+        
+        setDynamicChartConfig(newConfig)
+        
+      } catch (err) {
+        console.error('Error fetching data:', err)
+        setError(err instanceof Error ? err.message : 'Failed to fetch data')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [timeRange])
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Tool Calls by Status</CardTitle>
+          <CardDescription>Time-series distribution of tool call execution statuses</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[300px]">
+            <div className="text-muted-foreground">Loading...</div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Tool Calls by Status</CardTitle>
+          <CardDescription>Time-series distribution of tool call execution statuses</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[300px]">
+            <div className="text-destructive">Error: {error}</div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
     <Card>
@@ -45,29 +146,15 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full">
           <AreaChart accessibilityLayer data={chartData}>
             <defs>
-              <linearGradient id="gradient-status-success" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(142, 76%, 36%)" stopOpacity={0.1}/>
-              </linearGradient>
-              <linearGradient id="gradient-status-failed" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.1}/>
-              </linearGradient>
-              <linearGradient id="gradient-status-timeout" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(25, 95%, 53%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(25, 95%, 53%)" stopOpacity={0.1}/>
-              </linearGradient>
-              <linearGradient id="gradient-status-rateLimited" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.1}/>
-              </linearGradient>
-              <linearGradient id="gradient-status-error" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(0, 0%, 45%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(0, 0%, 45%)" stopOpacity={0.1}/>
-              </linearGradient>
+              {Object.entries(dynamicChartConfig).map(([key, config]) => (
+                <linearGradient key={`gradient-${key}`} id={`gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={config.color} stopOpacity={0.8}/>
+                  <stop offset="100%" stopColor={config.color} stopOpacity={0.1}/>
+                </linearGradient>
+              ))}
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
@@ -88,46 +175,17 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
               cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1 }}
             />
             <ChartLegend content={<ChartLegendContent />} />
-            <Area 
-              type="monotone" 
-              dataKey="success" 
-              stackId="a" 
-              stroke="hsl(142, 76%, 36%)" 
-              fill="url(#gradient-status-success)" 
-              strokeWidth={2}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="failed" 
-              stackId="a" 
-              stroke="hsl(0, 84%, 60%)" 
-              fill="url(#gradient-status-failed)" 
-              strokeWidth={2}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="timeout" 
-              stackId="a" 
-              stroke="hsl(25, 95%, 53%)" 
-              fill="url(#gradient-status-timeout)" 
-              strokeWidth={2}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="rateLimited" 
-              stackId="a" 
-              stroke="hsl(262, 83%, 58%)" 
-              fill="url(#gradient-status-rateLimited)" 
-              strokeWidth={2}
-            />
-            <Area 
-              type="monotone" 
-              dataKey="error" 
-              stackId="a" 
-              stroke="hsl(0, 0%, 45%)" 
-              fill="url(#gradient-status-error)" 
-              strokeWidth={2}
-            />
+            {Object.entries(dynamicChartConfig).map(([key, config]) => (
+              <Area 
+                key={key}
+                type="monotone" 
+                dataKey={key} 
+                stackId="a" 
+                stroke={config.color} 
+                fill={`url(#gradient-${key})`} 
+                strokeWidth={2}
+              />
+            ))}
           </AreaChart>
         </ChartContainer>
       </CardContent>
