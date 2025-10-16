@@ -2,6 +2,9 @@
 "$schema": "https://turborepo.org/schema.json",
   "tasks": {
     "build": {
+    "dependsOn": [
+        "^build"
+    ],
       "env": [
         "TURSO_DATABASE_URL",
         "TURSO_AUTH_TOKEN",
@@ -20,6 +23,10 @@
         "STRIPE_KEY",
         "STRIPE_WEBHOOK_SECRET"
       ]
+    },
+    "dev": {
+        "cache": false,
+        "persistent": true
     }
   }
 }
