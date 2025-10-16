@@ -72,7 +72,7 @@ export default async function AuthorizePage({
 					</div>
 
 					<h1 className="text-3xl font-semibold text-center mb-8">
-						{clientDetails.name} is requesting access to your Marrakech
+						{clientDetails.name} is requesting access to your Marrakesh
 						account
 					</h1>
 
@@ -92,7 +92,7 @@ export default async function AuthorizePage({
 								{scope.includes("profile") && (
 									<div className="flex items-center gap-3 text-zinc-300">
 										<Users className="h-5 w-5" />
-										<span>Read your Marrakech user data.</span>
+										<span>Read your Marrakesh user data.</span>
 									</div>
 								)}
 

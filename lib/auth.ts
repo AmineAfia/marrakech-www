@@ -78,7 +78,7 @@ const cookieDomain: string | undefined =
 		: undefined;
 
 export const auth = betterAuth({
-	appName: "Marrakech",
+	appName: "Marrakesh",
 	rateLimit: {
 		storage: "database",
 	},

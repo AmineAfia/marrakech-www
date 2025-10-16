@@ -1,7 +1,7 @@
 {
     "host": "https://api.us-east.aws.tinybird.co",
     "id": "5b40f821-8a5f-4b6f-bfac-5fd7b26da5ae",
-    "name": "marrakech",
+    "name": "marrakesh",
     "scope": "user",
     "token": "p.eyJ1IjogIjViNDBmODIxLThhNWYtNGI2Zi1iZmFjLTVmZDdiMjZkYTVhZSIsICJpZCI6ICJmYWE0NjI5ZC0yNTEwLTRjNjItOTc3Yi0wOTNlNGIyODFiMjAiLCAiaG9zdCI6ICJ1cy1lYXN0LWF3cyJ9.LmDsCgEh-dYVGkdYMbCs-TpcHQrdpz10PHIFYMu2IEQ",
     "tokens": {

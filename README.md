@@ -1,6 +1,6 @@
-# Marrakech
+# Marrakesh
 
-Welcome to the marrakech! This project is built with [Next.js](https://nextjs.org) using [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Welcome to the marrakesh! This project is built with [Next.js](https://nextjs.org) using [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 

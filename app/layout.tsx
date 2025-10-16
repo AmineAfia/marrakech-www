@@ -10,11 +10,11 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
 	title: {
-		template: "%s | Marrakech",
-		default: "Marrakech",
+		template: "%s | Marrakesh",
+		default: "Marrakesh",
 	},
-	description: "Marrakech is a platform for building AI-powered applications",
-	metadataBase: new URL("https://marrakech.dev"),
+	description: "Marrakesh is a platform for building AI-powered applications",
+	metadataBase: new URL("https://marrakesh.dev"),
 });
 
 export default function RootLayout({

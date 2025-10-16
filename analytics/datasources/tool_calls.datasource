@@ -1,5 +1,5 @@
 DESCRIPTION >
-    Generated from /Users/amine/Projects/solo/marrakech-www/analytics/tmp-seed-data/tool_calls.ndjson
+    Generated from /Users/amine/Projects/solo/marrakesh-www/analytics/tmp-seed-data/tool_calls.ndjson
 
 SCHEMA >
     cost_usd Float32 `json:$.cost_usd`,

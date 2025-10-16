@@ -1,5 +1,5 @@
 DESCRIPTION >
-    Generated from /Users/amine/Projects/solo/marrakech-www/analytics/tmp-seed-data/prompt_metadata.ndjson
+    Generated from /Users/amine/Projects/solo/marrakesh-www/analytics/tmp-seed-data/prompt_metadata.ndjson
 
 SCHEMA >
     account_id String `json:$.account_id`,

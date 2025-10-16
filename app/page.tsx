@@ -46,7 +46,7 @@ export default async function Home() {
 			<main className="flex flex-col gap-4 row-start-2 items-center justify-center">
 				<div className="flex flex-col gap-1">
 					<h3 className="font-bold text-4xl text-black dark:text-white text-center">
-						Marrakech.
+						Marrakesh.
 					</h3>
 					<p className="text-center break-words text-sm md:text-base">
 						Official demo to showcase{" "}
@@ -65,7 +65,7 @@ export default async function Home() {
 						<div className="border-y py-2 border-dotted bg-secondary/60 opacity-80">
 							<div className="text-xs flex items-center gap-2 justify-center text-muted-foreground ">
 								<span className="text-center">
-									All features on this demo are implemented with Marrakech
+									All features on this demo are implemented with Marrakesh
 									without any custom backend code
 								</span>
 							</div>
