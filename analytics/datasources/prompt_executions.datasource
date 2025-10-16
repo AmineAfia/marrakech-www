@@ -6,7 +6,7 @@ SCHEMA >
     cost_usd Float32 `json:$.cost_usd`,
     execution_id String `json:$.execution_id`,
     execution_time_ms Int32 `json:$.execution_time_ms`,
-    execution_timestamp DateTime `json:$.execution_timestamp`,
+    execution_timestamp DateTime `json:$.execution_timestamp` DEFAULT now(),
     model String `json:$.model`,
     organization_id String `json:$.organization_id`,
     prompt_id String `json:$.prompt_id`,

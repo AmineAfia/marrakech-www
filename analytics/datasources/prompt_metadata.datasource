@@ -3,7 +3,7 @@ DESCRIPTION >
 
 SCHEMA >
     account_id String `json:$.account_id`,
-    created_at DateTime `json:$.created_at`,
+    created_at DateTime `json:$.created_at` DEFAULT now(),
     description String `json:$.description`,
     is_active UInt8 `json:$.is_active`,
     name String `json:$.name`,

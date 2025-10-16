@@ -17,37 +17,37 @@ export const ToolCallSchema = z.object({
 
 // Prompt Metadata Schema - matches prompt_metadata datasource
 export const PromptMetadataSchema = z.object({
-  account_id: z.string(),
-  created_at: z.string().datetime(),
-  description: z.string(),
-  is_active: z.number().min(0).max(1),
-  name: z.string(),
-  organization_id: z.string(),
-  prompt_id: z.string(),
-  prompt_text: z.string(),
-  updated_at: z.string().datetime(),
-  version: z.string(),
-})
+	account_id: z.string(),
+	created_at: z.string().datetime().optional(),
+	description: z.string(),
+	is_active: z.number().min(0).max(1),
+	name: z.string(),
+	organization_id: z.string(),
+	prompt_id: z.string(),
+	prompt_text: z.string(),
+	updated_at: z.string().datetime(),
+	version: z.string(),
+});
 
 // Prompt Execution Schema - matches prompt_executions datasource
 export const PromptExecutionSchema = z.object({
-  account_id: z.string(),
-  cost_usd: z.number(),
-  execution_id: z.string(),
-  execution_time_ms: z.number(),
-  execution_timestamp: z.string().datetime(),
-  model: z.string(),
-  organization_id: z.string(),
-  prompt_id: z.string(),
-  prompt_name: z.string(),
-  prompt_version: z.string(),
-  region: z.string(),
-  request_tokens: z.number(),
-  response_tokens: z.number(),
-  session_id: z.string(),
-  status: z.string(),
-  error_message: z.string().nullable().optional(),
-})
+	account_id: z.string(),
+	cost_usd: z.number(),
+	execution_id: z.string(),
+	execution_time_ms: z.number(),
+	execution_timestamp: z.string().datetime().optional(),
+	model: z.string(),
+	organization_id: z.string(),
+	prompt_id: z.string(),
+	prompt_name: z.string(),
+	prompt_version: z.string(),
+	region: z.string(),
+	request_tokens: z.number(),
+	response_tokens: z.number(),
+	session_id: z.string(),
+	status: z.string(),
+	error_message: z.string().nullable().optional(),
+});
 
 // Main ingestion request schema
 export const IngestionRequestSchema = z.object({
