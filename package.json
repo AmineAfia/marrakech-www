@@ -102,5 +102,16 @@
     "tailwindcss": "^4.1.13",
     "tw-animate-css": "^1.3.8",
     "typescript": "5.9.3"
+},
+"pnpm": {
+    "onlyBuiltDependencies": [
+        "@prisma/client",
+        "@prisma/engines",
+        "@tailwindcss/oxide",
+        "better-sqlite3",
+        "core-js",
+        "prisma",
+        "sharp"
+    ]
   }
 }
