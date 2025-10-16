@@ -29,10 +29,8 @@ export async function POST(request: Request) {
 
     // Parse and validate request body
     const body = await request.json()
-    console.log('📥 [Endpoint Debug] Received request body:', JSON.stringify(body, null, 2))
     
     const validatedData = IngestionRequestSchema.parse(body)
-    console.log('📥 [Endpoint Debug] Validated data:', JSON.stringify(validatedData, null, 2))
 
     // Ingest data to Tinybird
     const result = await ingestData(
