@@ -78,7 +78,10 @@ const cookieDomain: string | undefined =
 		: undefined;
 
 export const auth = betterAuth({
-	appName: "Better Auth Demo",
+	appName: "Marrakech",
+	rateLimit: {
+		storage: "database",
+	},
 	baseURL,
 	database: db,
 	emailVerification: {
@@ -216,6 +219,7 @@ export const auth = betterAuth({
 		oneTap(),
 		apiKey({
 			enableMetadata: true,
+			rateLimit: false,
 		}),
 		customSession(async (session) => {
 			return {
@@ -240,3 +244,44 @@ export const auth = betterAuth({
 		},
 	},
 });
+
+export async function validateApiKey(apiKey: string) {
+	try {
+		const data = await auth.api.verifyApiKey({
+			body: {
+				key: apiKey,
+			},
+		});
+
+		if (!data || !data.valid) {
+			console.error("API key validation error:", JSON.stringify(data, null, 2));
+			return {
+				valid: false,
+				error: data?.error || {
+					message: "Invalid API key",
+					code: "INVALID_KEY",
+				},
+				userId: null,
+				metadata: null,
+			};
+		}
+
+		return {
+			valid: true,
+			error: null,
+			userId: data.key.userId,
+			metadata: data.key?.metadata || {},
+		};
+	} catch (error) {
+		console.error("API key validation error:", error);
+		return {
+			valid: false,
+			error: {
+				message: error instanceof Error ? error.message : "Unknown error",
+				code: "VALIDATION_ERROR",
+			},
+			userId: null,
+			metadata: null,
+		};
+	}
+}

@@ -46,14 +46,14 @@ export default async function Home() {
 			<main className="flex flex-col gap-4 row-start-2 items-center justify-center">
 				<div className="flex flex-col gap-1">
 					<h3 className="font-bold text-4xl text-black dark:text-white text-center">
-						Better Auth.
+						Marrakech.
 					</h3>
 					<p className="text-center break-words text-sm md:text-base">
 						Official demo to showcase{" "}
 						<a
 							href="https://better-auth.com"
 							target="_blank"
-							className="italic underline"
+							className="italic underline" rel="noreferrer"
 						>
 							better-auth.
 						</a>{" "}
@@ -65,7 +65,7 @@ export default async function Home() {
 						<div className="border-y py-2 border-dotted bg-secondary/60 opacity-80">
 							<div className="text-xs flex items-center gap-2 justify-center text-muted-foreground ">
 								<span className="text-center">
-									All features on this demo are implemented with Better Auth
+									All features on this demo are implemented with Marrakech
 									without any custom backend code
 								</span>
 							</div>

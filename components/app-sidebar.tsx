@@ -16,7 +16,6 @@ import {
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
@@ -25,14 +24,11 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
-import { useListOrganizations } from "@/lib/auth-client"
 import { Logo } from "@/components/logo"
-import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession()
-  const { data: organizations } = useListOrganizations()
 
   // Generate navigation items based on user role and session
   const navMain = React.useMemo(() => {
@@ -88,16 +84,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return items
   }, [session?.user?.role])
 
-  // Convert organizations to teams format
-  const teams = React.useMemo(() => {
-    if (!organizations) return []
-    
-    return organizations.map((org) => ({
-      name: org.name,
-      logo: Building2,
-      plan: "Organization",
-    }))
-  }, [organizations])
 
   // User data from session
   const user = React.useMemo(() => {
@@ -120,18 +106,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="flex items-center gap-2 px-2 py-2">
           <Link href="/" className="flex gap-2 cursor-pointer">
             <Logo />
-            <p className="dark:text-white text-black font-bold">BETTER-AUTH.</p>
+            <p className="dark:text-white text-black font-bold">MARRAKECH</p>
           </Link>
         </div>
-        {teams.length > 0 && <TeamSwitcher teams={teams} />}
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex items-center justify-between px-2 py-2">
-          <ThemeToggle />
-        </div>
         {user && <NavUser user={user} />}
       </SidebarFooter>
       <SidebarRail />

@@ -10,11 +10,11 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
 	title: {
-		template: "%s | Better Auth",
-		default: "Better Auth",
+		template: "%s | Marrakech",
+		default: "Marrakech",
 	},
-	description: "The most comprehensive authentication library for typescript",
-	metadataBase: new URL("https://demo.better-auth.com"),
+	description: "Marrakech is a platform for building AI-powered applications",
+	metadataBase: new URL("https://marrakech.dev"),
 });
 
 export default function RootLayout({
