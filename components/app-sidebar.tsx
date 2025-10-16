@@ -106,7 +106,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="flex items-center gap-2 px-2 py-2">
           <Link href="/" className="flex gap-2 cursor-pointer">
             <Logo />
-            <p className="dark:text-white text-black font-bold">MARRAKECH</p>
+            <p className="dark:text-white text-black font-bold">MARRAKESH</p>
           </Link>
         </div>
       </SidebarHeader>
