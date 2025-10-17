@@ -52,6 +52,9 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
         // Transform Tinybird data to chart format
         const dataMap = new Map<string, Record<string, string | number>>()
         
+        // First, collect all unique prompts to ensure consistent data structure
+        const allPrompts = [...new Set(result.data?.map((item: { prompt_name: string }) => item.prompt_name) || [])]
+        
         for (const item of result.data || []) {
           // Parse UTC timestamp and convert to user's local timezone
           const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
@@ -62,23 +65,30 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
           })
           
           if (!dataMap.has(timeKey)) {
-            dataMap.set(timeKey, { time: timeKey })
+            // Initialize with all prompts set to 0
+            const timeData: Record<string, string | number> = { time: timeKey }
+            for (const prompt of allPrompts) {
+              const promptKey = String(prompt).toLowerCase().replace(/[^a-z0-9]/g, '_')
+              timeData[promptKey] = 0
+            }
+            dataMap.set(timeKey, timeData)
           }
           
           const timeData = dataMap.get(timeKey)
-          // Use prompt name as key, sanitized for object property
-          const promptKey = item.prompt_name.toLowerCase().replace(/[^a-z0-9]/g, '_')
-          timeData[promptKey] = item.tool_call_count
+          if (timeData) {
+            // Use prompt name as key, sanitized for object property
+            const promptKey = item.prompt_name.toLowerCase().replace(/[^a-z0-9]/g, '_')
+            timeData[promptKey] = item.tool_call_count
+          }
         }
         
         const transformedData = Array.from(dataMap.values())
         setChartData(transformedData)
         
         // Update chart config with dynamic prompts
-        const prompts = [...new Set(result.data?.map((item: { prompt_name: string }) => item.prompt_name) || [])]
         const newConfig: ChartConfig = {}
         
-        prompts.forEach((prompt, index) => {
+        allPrompts.forEach((prompt, index) => {
           const colors = [
             "hsl(262, 83%, 58%)", // purple
             "hsl(199, 89%, 48%)", // blue
@@ -88,14 +98,14 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
             "hsl(0, 0%, 45%)"     // gray
           ]
           
-          const promptKey = prompt.toLowerCase().replace(/[^a-z0-9]/g, '_')
+          const promptKey = String(prompt).toLowerCase().replace(/[^a-z0-9]/g, '_')
           newConfig[promptKey] = {
-            label: prompt,
+            label: String(prompt),
             color: colors[index % colors.length]
           }
         })
         
-        setDynamicChartConfig(newConfig)
+        setDynamicChartConfig(newConfig as typeof chartConfig)
         
       } catch (err) {
         console.error('Error fetching data:', err)
@@ -149,16 +159,8 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full">
+        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full" ref={null} id="tool-calls-prompt-chart">
           <AreaChart accessibilityLayer data={chartData}>
-            <defs>
-              {Object.entries(dynamicChartConfig).map(([key, config]) => (
-                <linearGradient key={`gradient-${key}`} id={`gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={config.color} stopOpacity={0.8}/>
-                  <stop offset="100%" stopColor={config.color} stopOpacity={0.1}/>
-                </linearGradient>
-              ))}
-            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="time"
@@ -185,8 +187,8 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
                 dataKey={key} 
                 stackId="a" 
                 stroke={config.color} 
-                fill={`url(#gradient-${key})`} 
-                strokeWidth={2}
+                fill={`${config.color.replace(')', ', 0.225)')}`} 
+                strokeWidth={1}
               />
             ))}
           </AreaChart>

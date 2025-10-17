@@ -105,14 +105,8 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+        <ChartContainer config={chartConfig} className="min-h-[300px] w-full" ref={null} id="requests-chart">
           <AreaChart accessibilityLayer data={chartData}>
-            <defs>
-              <linearGradient id="gradient-executions" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.1}/>
-              </linearGradient>
-            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="time"
@@ -136,8 +130,8 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
               type="monotone" 
               dataKey="executions" 
               stroke="hsl(262, 83%, 58%)" 
-              fill="url(#gradient-executions)" 
-              strokeWidth={2}
+              fill="hsl(262, 83%, 58%, 0.225)" 
+              strokeWidth={1}
             />
           </AreaChart>
         </ChartContainer>

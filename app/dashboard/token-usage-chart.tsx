@@ -142,14 +142,6 @@ export function TokenUsageChart({ timeRange }: TokenUsageChartProps) {
       <CardContent>
         <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full">
           <AreaChart accessibilityLayer data={chartData}>
-            <defs>
-              {Object.entries(dynamicChartConfig).map(([key, config]) => (
-                <linearGradient key={`gradient-${key}`} id={`gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={config.color} stopOpacity={0.8}/>
-                  <stop offset="100%" stopColor={config.color} stopOpacity={0.1}/>
-                </linearGradient>
-              ))}
-            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="prompt"
@@ -177,8 +169,8 @@ export function TokenUsageChart({ timeRange }: TokenUsageChartProps) {
                 dataKey="tokens" 
                 stackId="a" 
                 stroke={config.color} 
-                fill={`url(#gradient-${key})`} 
-                strokeWidth={2}
+                fill={`${config.color}22`} 
+                strokeWidth={1}
               />
             ))}
           </AreaChart>

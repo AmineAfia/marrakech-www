@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
@@ -53,9 +53,43 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
         
         const result = await response.json()
         
-        // Transform Tinybird data to chart format
+        // Generate complete time range based on timeRange prop
+        const now = new Date()
+        const timeRangeMinutes = {
+          '5m': 5,
+          '15m': 15,
+          '1h': 60,
+          '6h': 360,
+          '12h': 720,
+          '24h': 1440
+        }
+        
+        const minutesBack = timeRangeMinutes[timeRange] || 60
+        const startTime = new Date(now.getTime() - minutesBack * 60 * 1000)
+        
+        // Generate all time slots for the complete range
+        const allTimeSlots: Array<Record<string, string | number>> = []
+        const currentTime = new Date(startTime)
+        
+        while (currentTime <= now) {
+          const timeKey = currentTime.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit'
+          })
+          
+          allTimeSlots.push({ time: timeKey })
+          currentTime.setMinutes(currentTime.getMinutes() + 1)
+        }
+        
+        // Transform Tinybird data to chart format and merge with complete time slots
         const dataMap = new Map<string, Record<string, string | number>>()
         
+        // Initialize all time slots with zero values for all statuses
+        for (const slot of allTimeSlots) {
+          dataMap.set(slot.time, { ...slot })
+        }
+        
+        // Fill in actual data
         for (const item of result.data || []) {
           // Parse UTC timestamp and convert to user's local timezone
           const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
@@ -65,12 +99,10 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
             // Defaults to browser's local timezone
           })
           
-          if (!dataMap.has(timeKey)) {
-            dataMap.set(timeKey, { time: timeKey })
+          if (dataMap.has(timeKey)) {
+            const timeData = dataMap.get(timeKey)
+            timeData[item.status.toLowerCase()] = item.tool_call_count
           }
-          
-          const timeData = dataMap.get(timeKey)
-          timeData[item.status.toLowerCase()] = item.tool_call_count
         }
         
         const transformedData = Array.from(dataMap.values())
@@ -150,15 +182,7 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full">
-          <AreaChart accessibilityLayer data={chartData}>
-            <defs>
-              {Object.entries(dynamicChartConfig).map(([key, config]) => (
-                <linearGradient key={`gradient-${key}`} id={`gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={config.color} stopOpacity={0.8}/>
-                  <stop offset="100%" stopColor={config.color} stopOpacity={0.1}/>
-                </linearGradient>
-              ))}
-            </defs>
+          <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="time"
@@ -179,17 +203,16 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
             />
             <ChartLegend content={<ChartLegendContent />} />
             {Object.entries(dynamicChartConfig).map(([key, config]) => (
-              <Area 
+              <Bar 
                 key={key}
-                type="monotone" 
                 dataKey={key} 
                 stackId="a" 
-                stroke={config.color} 
-                fill={`url(#gradient-${key})`} 
-                strokeWidth={2}
+                stroke="none"
+                fill={config.color}
+                radius={[0, 0, 0, 0]}
               />
             ))}
-          </AreaChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
