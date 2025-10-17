@@ -2,7 +2,7 @@ NODE endpoint
 SQL >
     %
     SELECT 
-        formatDateTime(toStartOfMinute(execution_timestamp), '%Y-%m-%dT%H:%M:%S') AS minute,
+        formatDateTime(toStartOfHour(execution_timestamp), '%Y-%m-%dT%H:%M:%S') AS hour,
         prompt_name,
         prompt_version,
         count() AS execution_count
@@ -15,6 +15,7 @@ SQL >
             WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '30d' THEN now64(3) - INTERVAL 30 DAY
             ELSE now64(3) - INTERVAL 1 DAY
         END
-    GROUP BY minute, prompt_name, prompt_version
-    ORDER BY minute ASC
+    GROUP BY hour, prompt_name, prompt_version
+    ORDER BY hour ASC
 TYPE ENDPOINT
+

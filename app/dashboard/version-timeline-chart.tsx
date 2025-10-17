@@ -7,17 +7,17 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLe
 import type { TimeRange } from "./time-range-picker"
 
 const chartConfig = {
-  executions: {
-    label: "Executions",
-    color: "hsl(262, 83%, 58%)", // Datadog purple
+  execution_count: {
+    label: "Execution Count",
+    color: "hsl(262, 83%, 58%)", // purple
   },
 } satisfies ChartConfig
 
-interface RequestsChartProps {
+interface VersionTimelineChartProps {
   timeRange: TimeRange
 }
 
-export function RequestsChart({ timeRange }: RequestsChartProps) {
+export function VersionTimelineChart({ timeRange }: VersionTimelineChartProps) {
   const [chartData, setChartData] = useState<Array<Record<string, string | number>>>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -29,7 +29,7 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         setLoading(true)
         setError(null)
         
-        const response = await fetch(`/api/analytics/prompt-executions-per-minute?timeframe=${timeRange}`)
+        const response = await fetch(`/api/analytics/version-deployment-timeline?timeframe=${timeRange}`)
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
@@ -45,7 +45,7 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         
         for (const item of result.data || []) {
           // Parse UTC timestamp and convert to user's local timezone
-          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
+          const utcDate = new Date(`${item.hour}Z`) // Ensure it's treated as UTC
           const timeKey = utcDate.toLocaleTimeString('en-US', { 
             hour: '2-digit', 
             minute: '2-digit'
@@ -94,6 +94,7 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         })
         
         setDynamicChartConfig(newConfig as typeof chartConfig)
+        
       } catch (err) {
         console.error('Error fetching data:', err)
         setError(err instanceof Error ? err.message : 'Failed to fetch data')
@@ -109,8 +110,8 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Prompt Executions Over Time</CardTitle>
-          <CardDescription>Number of prompt executions per minute</CardDescription>
+          <CardTitle>Version Deployment Timeline</CardTitle>
+          <CardDescription>Version adoption over time</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-[300px]">
@@ -125,8 +126,8 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Prompt Executions Over Time</CardTitle>
-          <CardDescription>Number of prompt executions per minute</CardDescription>
+          <CardTitle>Version Deployment Timeline</CardTitle>
+          <CardDescription>Version adoption over time</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-[300px]">
@@ -140,13 +141,13 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Prompt Executions Over Time by Version</CardTitle>
+        <CardTitle>Version Deployment Timeline</CardTitle>
         <CardDescription>
-          Number of prompt executions per minute grouped by version
+          Version adoption over time
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full" ref={null} id="requests-chart">
+        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full" ref={null} id="version-timeline-chart">
           <AreaChart accessibilityLayer data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
@@ -159,7 +160,7 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
             <YAxis
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value) => `${value}`}
+              tickFormatter={(value) => value.toLocaleString()}
               tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
             />
             <ChartTooltip 

@@ -4,8 +4,9 @@ SQL >
     SELECT 
         formatDateTime(toStartOfMinute(execution_timestamp), '%Y-%m-%dT%H:%M:%S') AS minute,
         prompt_name,
-        prompt_version,
-        count() AS execution_count
+        round(sum(response_tokens) / nullIf(sum(request_tokens), 0), 2) AS efficiency_ratio,
+        sum(request_tokens) AS total_request_tokens,
+        sum(response_tokens) AS total_response_tokens
     FROM prompt_executions
     WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
         AND execution_timestamp >= CASE 
@@ -15,6 +16,7 @@ SQL >
             WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '30d' THEN now64(3) - INTERVAL 30 DAY
             ELSE now64(3) - INTERVAL 1 DAY
         END
-    GROUP BY minute, prompt_name, prompt_version
+    GROUP BY minute, prompt_name
     ORDER BY minute ASC
 TYPE ENDPOINT
+

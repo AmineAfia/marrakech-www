@@ -2,12 +2,12 @@ NODE endpoint
 SQL >
     %
     SELECT 
-        formatDateTime(toStartOfMinute(execution_timestamp), '%Y-%m-%dT%H:%M:%S') AS minute,
-        prompt_name,
-        prompt_version,
-        count() AS execution_count
+        user_id,
+        count() AS execution_count,
+        round(sum(cost_usd), 4) AS total_cost_usd,
+        sum(request_tokens + response_tokens) AS total_tokens
     FROM prompt_executions
-    WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
+    WHERE organization_id = {{ String(organizationId, 'org_001', description='Organization ID to filter by', required=True) }}
         AND execution_timestamp >= CASE 
             WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
             WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
@@ -15,6 +15,8 @@ SQL >
             WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '30d' THEN now64(3) - INTERVAL 30 DAY
             ELSE now64(3) - INTERVAL 1 DAY
         END
-    GROUP BY minute, prompt_name, prompt_version
-    ORDER BY minute ASC
+    GROUP BY user_id
+    ORDER BY execution_count DESC
+    LIMIT 20
 TYPE ENDPOINT
+
