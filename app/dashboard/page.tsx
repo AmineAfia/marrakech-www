@@ -4,7 +4,7 @@ import { useState } from "react"
 import { RequestsChart } from "./requests-chart"
 import { ToolCallsPromptChart } from "./tool-calls-prompt-chart"
 import { ToolCallsStatusChart } from "./tool-calls-status-chart"
-import { TokenUsageChart } from "./token-usage-chart"
+import { ToolCallsByNameChart } from "./tool-calls-by-name-chart"
 import { PromptSuccessRateChart } from "./prompt-success-rate-chart"
 import { AvgExecutionTimeChart } from "./avg-execution-time-chart"
 import { CostAnalysisChart } from "./cost-analysis-chart"
@@ -112,7 +112,7 @@ export default function DashboardPage() {
           <RequestsChart timeRange={timeRange} />
           <ToolCallsPromptChart timeRange={timeRange} />
           <ToolCallsStatusChart timeRange={timeRange} />
-          <TokenUsageChart timeRange={timeRange} />
+          <ToolCallsByNameChart timeRange={timeRange} />
         </div>
       </div>
     </div>
