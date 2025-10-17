@@ -81,6 +81,16 @@ export function ExecutiveKPICards({ timeRange }: ExecutiveKPICardsProps) {
     return `${change > 0 ? '+' : ''}${change.toFixed(1)} points from previous period`
   }
 
+  const formatCurrency = (value: number | null) => {
+    if (value === null || value === undefined) return "No data"
+    return `$${value.toFixed(4)}`
+  }
+
+  const formatPercentage = (value: number | null) => {
+    if (value === null || value === undefined) return "No data"
+    return `${value.toFixed(1)}%`
+  }
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -136,7 +146,7 @@ export function ExecutiveKPICards({ timeRange }: ExecutiveKPICardsProps) {
           {getTrendIcon(kpiData.avg_cost_change_percent ? -kpiData.avg_cost_change_percent : null)}
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${kpiData.current_avg_cost.toFixed(4)}</div>
+          <div className="text-2xl font-bold">{formatCurrency(kpiData.current_avg_cost)}</div>
           <p className={`text-xs ${getTrendColor(kpiData.avg_cost_change_percent ? -kpiData.avg_cost_change_percent : null)}`}>
             {formatChange(kpiData.avg_cost_change_percent)}
           </p>
@@ -149,7 +159,7 @@ export function ExecutiveKPICards({ timeRange }: ExecutiveKPICardsProps) {
           {getTrendIcon(kpiData.success_rate_change_points)}
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{kpiData.current_success_rate.toFixed(1)}%</div>
+          <div className="text-2xl font-bold">{formatPercentage(kpiData.current_success_rate)}</div>
           <p className={`text-xs ${getTrendColor(kpiData.success_rate_change_points)}`}>
             {formatPointsChange(kpiData.success_rate_change_points)}
           </p>

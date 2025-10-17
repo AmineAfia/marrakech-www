@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart"
+import { StackedBarChart, ChartWrapper } from "@/components/charts"
+import { type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
 
 const chartConfig = {
@@ -53,59 +52,16 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
         
         const result = await response.json()
         
-        // Generate complete time range based on timeRange prop
-        const now = new Date()
-        const timeRangeMinutes = {
-          '5m': 5,
-          '15m': 15,
-          '1h': 60,
-          '6h': 360,
-          '12h': 720,
-          '24h': 1440
-        }
+        // Pass raw API data to chart component - let component handle time processing
+        const transformedData: Array<Record<string, string | number>> = []
         
-        const minutesBack = timeRangeMinutes[timeRange] || 60
-        const startTime = new Date(now.getTime() - minutesBack * 60 * 1000)
-        
-        // Generate all time slots for the complete range
-        const allTimeSlots: Array<Record<string, string | number>> = []
-        const currentTime = new Date(startTime)
-        
-        while (currentTime <= now) {
-          const timeKey = currentTime.toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
-            minute: '2-digit'
-          })
-          
-          allTimeSlots.push({ time: timeKey })
-          currentTime.setMinutes(currentTime.getMinutes() + 1)
-        }
-        
-        // Transform Tinybird data to chart format and merge with complete time slots
-        const dataMap = new Map<string, Record<string, string | number>>()
-        
-        // Initialize all time slots with zero values for all statuses
-        for (const slot of allTimeSlots) {
-          dataMap.set(slot.time, { ...slot })
-        }
-        
-        // Fill in actual data
         for (const item of result.data || []) {
-          // Parse UTC timestamp and convert to user's local timezone
-          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
-          const timeKey = utcDate.toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
-            minute: '2-digit'
-            // Defaults to browser's local timezone
+          transformedData.push({
+            minute: item.minute, // Pass raw minute timestamp
+            [item.status.toLowerCase()]: item.tool_call_count
           })
-          
-          if (dataMap.has(timeKey)) {
-            const timeData = dataMap.get(timeKey)
-            timeData[item.status.toLowerCase()] = item.tool_call_count
-          }
         }
         
-        const transformedData = Array.from(dataMap.values())
         setChartData(transformedData)
         
         // Update chart config with dynamic statuses
@@ -140,81 +96,19 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
     fetchData()
   }, [timeRange])
 
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Tool Calls by Status</CardTitle>
-          <CardDescription>Time-series distribution of tool call execution statuses</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-muted-foreground">Loading...</div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Tool Calls by Status</CardTitle>
-          <CardDescription>Time-series distribution of tool call execution statuses</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-destructive">Error: {error}</div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Tool Calls by Status</CardTitle>
-        <CardDescription>
-          Time-series distribution of tool call execution statuses
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full">
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-            <XAxis
-              dataKey="time"
-              tickLine={false}
-              tickMargin={8}
-              axisLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => value.toLocaleString()}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
-            <ChartTooltip 
-              content={<ChartTooltipContent />}
-              cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1 }}
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-            {Object.entries(dynamicChartConfig).map(([key, config]) => (
-              <Bar 
-                key={key}
-                dataKey={key} 
-                stackId="a" 
-                stroke="none"
-                fill={config.color}
-                radius={[0, 0, 0, 0]}
-              />
-            ))}
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartWrapper
+      title="Tool Calls by Status"
+      description="Time-series distribution of tool call execution statuses"
+      loading={loading}
+      error={error}
+    >
+      <StackedBarChart
+        data={chartData}
+        config={dynamicChartConfig}
+        timeRange={timeRange}
+        yAxisFormatter={(value) => value.toLocaleString()}
+      />
+    </ChartWrapper>
   )
 }
