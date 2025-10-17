@@ -1,0 +1,107 @@
+NODE endpoint
+SQL >
+    %
+    WITH current_period AS (
+        SELECT
+            count() AS total_executions,
+            round(avg(cost_usd), 6) AS avg_cost,
+            round((countIf(status = 'success') / count()) * 100, 2) AS success_rate,
+            0 AS total_tool_calls
+        FROM prompt_executions
+        WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
+            AND execution_timestamp >= CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 5 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 15 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 6 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 12 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
+                ELSE now64(3) - INTERVAL 1 DAY
+            END
+    ),
+    previous_period AS (
+        SELECT
+            count() AS total_executions,
+            round(avg(cost_usd), 6) AS avg_cost,
+            round((countIf(status = 'success') / count()) * 100, 2) AS success_rate,
+            0 AS total_tool_calls
+        FROM prompt_executions
+        WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
+            AND execution_timestamp >= CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 10 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 30 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 2 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 12 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 24 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 2 DAY
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 14 DAY
+                ELSE now64(3) - INTERVAL 2 DAY
+            END
+            AND execution_timestamp < CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 5 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 15 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 6 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 12 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
+                ELSE now64(3) - INTERVAL 1 DAY
+            END
+    ),
+    tool_calls_current AS (
+        SELECT count() AS total_tool_calls
+        FROM tool_calls
+        WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
+            AND tool_call_timestamp >= CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 5 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 15 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 6 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 12 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
+                ELSE now64(3) - INTERVAL 1 DAY
+            END
+    ),
+    tool_calls_previous AS (
+        SELECT count() AS total_tool_calls
+        FROM tool_calls
+        WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
+            AND tool_call_timestamp >= CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 10 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 30 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 2 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 12 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 24 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 2 DAY
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 14 DAY
+                ELSE now64(3) - INTERVAL 2 DAY
+            END
+            AND tool_call_timestamp < CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 5 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 15 MINUTE
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 6 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 12 HOUR
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
+                ELSE now64(3) - INTERVAL 1 DAY
+            END
+    )
+    SELECT
+        cp.total_executions AS current_total_executions,
+        pp.total_executions AS previous_total_executions,
+        round(((cp.total_executions - pp.total_executions) / nullIf(pp.total_executions, 0)) * 100, 2) AS executions_change_percent,
+        cp.avg_cost AS current_avg_cost,
+        pp.avg_cost AS previous_avg_cost,
+        round(((cp.avg_cost - pp.avg_cost) / nullIf(pp.avg_cost, 0)) * 100, 2) AS avg_cost_change_percent,
+        cp.success_rate AS current_success_rate,
+        pp.success_rate AS previous_success_rate,
+        round(cp.success_rate - pp.success_rate, 2) AS success_rate_change_points,
+        tcc.total_tool_calls AS current_total_tool_calls,
+        tcp.total_tool_calls AS previous_total_tool_calls,
+        round(((tcc.total_tool_calls - tcp.total_tool_calls) / nullIf(tcp.total_tool_calls, 0)) * 100, 2) AS tool_calls_change_percent
+    FROM current_period cp, previous_period pp, tool_calls_current tcc, tool_calls_previous tcp
+TYPE ENDPOINT
+

@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart"
+import { ChartWrapper, StackedBarChart } from "@/components/charts"
+import { type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
 
 const chartConfig = {
@@ -18,9 +17,10 @@ interface RequestsChartProps {
 }
 
 export function RequestsChart({ timeRange }: RequestsChartProps) {
-  const [chartData, setChartData] = useState<Array<{ time: string; executions: number }>>([])
+  const [chartData, setChartData] = useState<Array<Record<string, string | number>>>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [dynamicChartConfig, setDynamicChartConfig] = useState(chartConfig)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,23 +36,44 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         
         const result = await response.json()
         
-        // Transform Tinybird data to chart format
-        const transformedData = result.data?.map((item: { minute: string; execution_count: number }) => {
-          // Parse UTC timestamp and convert to user's local timezone
-          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
-          const localTime = utcDate.toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
-            minute: '2-digit'
-            // Defaults to browser's local timezone
-          })
+        // Pass raw API data to chart component - let component handle time processing
+        const transformedData: Array<Record<string, string | number>> = []
+        
+        for (const item of result.data || []) {
+          // Use version as key, sanitized for object property
+          const versionKey = item.prompt_version.toLowerCase().replace(/[^a-z0-9]/g, '_')
           
-          return {
-            time: localTime,
-            executions: item.execution_count
-          }
-        }) || []
+          transformedData.push({
+            minute: item.minute, // Pass raw minute timestamp
+            [versionKey]: item.execution_count
+          })
+        }
         
         setChartData(transformedData)
+        
+        // Update chart config with dynamic versions
+        const allVersions = [...new Set(result.data?.map((item: { prompt_version: string }) => item.prompt_version) || [])]
+        const newConfig: ChartConfig = {}
+        
+        allVersions.forEach((version, index) => {
+          const colors = [
+            "hsl(262, 83%, 58%)", // purple
+            "hsl(199, 89%, 48%)", // blue
+            "hsl(142, 76%, 36%)", // green
+            "hsl(25, 95%, 53%)",  // orange
+            "hsl(0, 84%, 60%)",   // red
+            "hsl(0, 0%, 45%)"     // gray
+          ]
+          
+          const versionKey = String(version).toLowerCase().replace(/[^a-z0-9]/g, '_')
+          newConfig[versionKey] = {
+            label: String(version),
+            color: colors[index % colors.length]
+          }
+        })
+        
+        setDynamicChartConfig(newConfig as typeof chartConfig)
+        
       } catch (err) {
         console.error('Error fetching data:', err)
         setError(err instanceof Error ? err.message : 'Failed to fetch data')
@@ -64,78 +85,19 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
     fetchData()
   }, [timeRange])
 
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Prompt Executions Over Time</CardTitle>
-          <CardDescription>Number of prompt executions per minute</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-muted-foreground">Loading...</div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Prompt Executions Over Time</CardTitle>
-          <CardDescription>Number of prompt executions per minute</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-destructive">Error: {error}</div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Prompt Executions Over Time</CardTitle>
-        <CardDescription>
-          Number of prompt executions per minute
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[300px] w-full" ref={null} id="requests-chart">
-          <AreaChart accessibilityLayer data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-            <XAxis
-              dataKey="time"
-              tickLine={false}
-              tickMargin={8}
-              axisLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `${value}`}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
-            <ChartTooltip 
-              content={<ChartTooltipContent />}
-              cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1 }}
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Area 
-              type="monotone" 
-              dataKey="executions" 
-              stroke="hsl(262, 83%, 58%)" 
-              fill="hsl(262, 83%, 58%, 0.225)" 
-              strokeWidth={1}
-            />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartWrapper
+      title="Prompt Executions Over Time by Version"
+      description="Execution volume by version"
+      loading={loading}
+      error={error}
+    >
+      <StackedBarChart
+        data={chartData}
+        config={dynamicChartConfig}
+        timeRange={timeRange}
+      />
+    </ChartWrapper>
   )
 }

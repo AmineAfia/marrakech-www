@@ -1,38 +1,22 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { StackedBarChart, ChartWrapper } from "@/components/charts"
+import { ChartWrapper, FilledAreaChart } from "@/components/charts"
 import { type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
 
 const chartConfig = {
-  success: {
-    label: "Success",
-    color: "hsl(142, 76%, 36%)", // Datadog green
-  },
-  failed: {
-    label: "Failed",
-    color: "hsl(0, 84%, 60%)", // Datadog red
-  },
-  timeout: {
-    label: "Timeout",
-    color: "hsl(25, 95%, 53%)", // Datadog orange
-  },
-  rateLimited: {
-    label: "Rate Limited",
-    color: "hsl(262, 83%, 58%)", // Datadog purple
-  },
-  error: {
-    label: "Error",
-    color: "hsl(0, 0%, 45%)", // Datadog gray
+  execution_count: {
+    label: "Execution Count",
+    color: "hsl(262, 83%, 58%)", // purple
   },
 } satisfies ChartConfig
 
-interface ToolCallsStatusChartProps {
+interface VersionTimelineChartProps {
   timeRange: TimeRange
 }
 
-export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
+export function VersionTimelineChart({ timeRange }: VersionTimelineChartProps) {
   const [chartData, setChartData] = useState<Array<Record<string, string | number>>>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -44,7 +28,7 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
         setLoading(true)
         setError(null)
         
-        const response = await fetch(`/api/analytics/tool-calls-by-status?timeframe=${timeRange}`)
+        const response = await fetch(`/api/analytics/version-deployment-timeline?timeframe=${timeRange}`)
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
@@ -56,34 +40,39 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
         const transformedData: Array<Record<string, string | number>> = []
         
         for (const item of result.data || []) {
+          // Use version as key, sanitized for object property
+          const versionKey = item.prompt_version.toLowerCase().replace(/[^a-z0-9]/g, '_')
+          
           transformedData.push({
-            minute: item.minute, // Pass raw minute timestamp
-            [item.status.toLowerCase()]: item.tool_call_count
+            minute: item.hour, // Pass raw hour timestamp (note: this API uses 'hour' field)
+            [versionKey]: item.execution_count
           })
         }
         
         setChartData(transformedData)
         
-        // Update chart config with dynamic statuses
-        const statuses = [...new Set(result.data?.map((item: { status: string }) => item.status.toLowerCase()) || [])]
+        // Update chart config with dynamic versions
+        const allVersions = [...new Set(result.data?.map((item: { prompt_version: string }) => item.prompt_version) || [])]
         const newConfig: ChartConfig = {}
         
-        statuses.forEach((status, index) => {
+        allVersions.forEach((version, index) => {
           const colors = [
-            "hsl(142, 76%, 36%)", // green
-            "hsl(0, 84%, 60%)",   // red
-            "hsl(25, 95%, 53%)",  // orange
             "hsl(262, 83%, 58%)", // purple
+            "hsl(199, 89%, 48%)", // blue
+            "hsl(142, 76%, 36%)", // green
+            "hsl(25, 95%, 53%)",  // orange
+            "hsl(0, 84%, 60%)",   // red
             "hsl(0, 0%, 45%)"     // gray
           ]
           
-          newConfig[status] = {
-            label: status.charAt(0).toUpperCase() + status.slice(1),
+          const versionKey = String(version).toLowerCase().replace(/[^a-z0-9]/g, '_')
+          newConfig[versionKey] = {
+            label: String(version),
             color: colors[index % colors.length]
           }
         })
         
-        setDynamicChartConfig(newConfig)
+        setDynamicChartConfig(newConfig as typeof chartConfig)
         
       } catch (err) {
         console.error('Error fetching data:', err)
@@ -98,12 +87,12 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
 
   return (
     <ChartWrapper
-      title="Tool Calls by Status"
-      description="Time-series distribution of tool call execution statuses"
+      title="Version Deployment Timeline"
+      description="Version adoption over time"
       loading={loading}
       error={error}
     >
-      <StackedBarChart
+      <FilledAreaChart
         data={chartData}
         config={dynamicChartConfig}
         timeRange={timeRange}

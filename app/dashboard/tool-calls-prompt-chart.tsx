@@ -1,9 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, type ChartConfig } from "@/components/ui/chart"
+import { FilledAreaChart, ChartWrapper } from "@/components/charts"
+import { type ChartConfig } from "@/components/ui/chart"
 import type { TimeRange } from "./time-range-picker"
 
 const chartConfig = {
@@ -49,43 +48,23 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
         
         const result = await response.json()
         
-        // Transform Tinybird data to chart format
-        const dataMap = new Map<string, Record<string, string | number>>()
-        
-        // First, collect all unique prompts to ensure consistent data structure
-        const allPrompts = [...new Set(result.data?.map((item: { prompt_name: string }) => item.prompt_name) || [])]
+        // Pass raw API data to chart component - let component handle time processing
+        const transformedData: Array<Record<string, string | number>> = []
         
         for (const item of result.data || []) {
-          // Parse UTC timestamp and convert to user's local timezone
-          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
-          const timeKey = utcDate.toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
-            minute: '2-digit'
-            // Defaults to browser's local timezone
+          // Use prompt name as key, sanitized for object property
+          const promptKey = item.prompt_name.toLowerCase().replace(/[^a-z0-9]/g, '_')
+          
+          transformedData.push({
+            minute: item.minute, // Pass raw minute timestamp
+            [promptKey]: item.tool_call_count
           })
-          
-          if (!dataMap.has(timeKey)) {
-            // Initialize with all prompts set to 0
-            const timeData: Record<string, string | number> = { time: timeKey }
-            for (const prompt of allPrompts) {
-              const promptKey = String(prompt).toLowerCase().replace(/[^a-z0-9]/g, '_')
-              timeData[promptKey] = 0
-            }
-            dataMap.set(timeKey, timeData)
-          }
-          
-          const timeData = dataMap.get(timeKey)
-          if (timeData) {
-            // Use prompt name as key, sanitized for object property
-            const promptKey = item.prompt_name.toLowerCase().replace(/[^a-z0-9]/g, '_')
-            timeData[promptKey] = item.tool_call_count
-          }
         }
         
-        const transformedData = Array.from(dataMap.values())
         setChartData(transformedData)
         
         // Update chart config with dynamic prompts
+        const allPrompts = [...new Set(result.data?.map((item: { prompt_name: string }) => item.prompt_name) || [])]
         const newConfig: ChartConfig = {}
         
         allPrompts.forEach((prompt, index) => {
@@ -118,82 +97,19 @@ export function ToolCallsPromptChart({ timeRange }: ToolCallsPromptChartProps) {
     fetchData()
   }, [timeRange])
 
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Tool Calls by Prompt</CardTitle>
-          <CardDescription>Time-series tool calls executed per prompt</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-muted-foreground">Loading...</div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Tool Calls by Prompt</CardTitle>
-          <CardDescription>Time-series tool calls executed per prompt</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-[300px]">
-            <div className="text-destructive">Error: {error}</div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Tool Calls by Prompt</CardTitle>
-        <CardDescription>
-          Time-series tool calls executed per prompt
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={dynamicChartConfig} className="min-h-[300px] w-full" ref={null} id="tool-calls-prompt-chart">
-          <AreaChart accessibilityLayer data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-            <XAxis
-              dataKey="time"
-              tickLine={false}
-              tickMargin={8}
-              axisLine={false}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => value.toLocaleString()}
-              tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-            />
-            <ChartTooltip 
-              content={<ChartTooltipContent />}
-              cursor={{ stroke: "hsl(var(--border))", strokeWidth: 1 }}
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-            {Object.entries(dynamicChartConfig).map(([key, config]) => (
-              <Area 
-                key={key}
-                type="monotone" 
-                dataKey={key} 
-                stackId="a" 
-                stroke={config.color} 
-                fill={`${config.color.replace(')', ', 0.225)')}`} 
-                strokeWidth={1}
-              />
-            ))}
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartWrapper
+      title="Tool Calls by Prompt"
+      description="Time-series tool calls executed per prompt"
+      loading={loading}
+      error={error}
+    >
+      <FilledAreaChart
+        data={chartData}
+        config={dynamicChartConfig}
+        timeRange={timeRange}
+        yAxisFormatter={(value) => value.toLocaleString()}
+      />
+    </ChartWrapper>
   )
 }

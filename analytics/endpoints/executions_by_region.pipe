@@ -2,23 +2,13 @@ NODE endpoint
 SQL >
     %
     SELECT 
-        formatDateTime(
-            CASE 
-                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} IN ('5m', '15m', '1h') 
-                    THEN toStartOfMinute(tool_call_timestamp)
-                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} IN ('6h', '12h', '24h') 
-                    THEN toStartOfInterval(tool_call_timestamp, INTERVAL 5 MINUTE)
-                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d'
-                    THEN toStartOfHour(tool_call_timestamp)
-                ELSE toStartOfHour(tool_call_timestamp)
-            END,
-            '%Y-%m-%dT%H:%M:%S'
-        ) AS minute,
-        status,
-        count() AS tool_call_count
-    FROM tool_calls
+        region,
+        count() AS execution_count,
+        round(avg(execution_time_ms), 2) AS avg_execution_time_ms,
+        round(sum(cost_usd), 4) AS total_cost_usd
+    FROM prompt_executions
     WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
-        AND tool_call_timestamp >= CASE 
+        AND execution_timestamp >= CASE 
             WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 5 MINUTE
             WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 15 MINUTE
             WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
@@ -28,6 +18,7 @@ SQL >
             WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
             ELSE now64(3) - INTERVAL 1 DAY
         END
-    GROUP BY minute, status
-    ORDER BY minute ASC, tool_call_count DESC
+    GROUP BY region
+    ORDER BY execution_count DESC
 TYPE ENDPOINT
+

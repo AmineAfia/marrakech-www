@@ -2,17 +2,33 @@ NODE endpoint
 SQL >
     %
     SELECT 
-        formatDateTime(toStartOfMinute(execution_timestamp), '%Y-%m-%dT%H:%M:%S') AS minute,
+        formatDateTime(
+            CASE 
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} IN ('5m', '15m', '1h') 
+                    THEN toStartOfMinute(execution_timestamp)
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} IN ('6h', '12h', '24h') 
+                    THEN toStartOfInterval(execution_timestamp, INTERVAL 5 MINUTE)
+                WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d'
+                    THEN toStartOfHour(execution_timestamp)
+                ELSE toStartOfHour(execution_timestamp)
+            END,
+            '%Y-%m-%dT%H:%M:%S'
+        ) AS minute,
+        prompt_name,
+        prompt_version,
         count() AS execution_count
     FROM prompt_executions
     WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
         AND execution_timestamp >= CASE 
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '30d' THEN now64(3) - INTERVAL 30 DAY
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now64(3) - INTERVAL 5 MINUTE
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now64(3) - INTERVAL 15 MINUTE
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now64(3) - INTERVAL 1 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now64(3) - INTERVAL 6 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now64(3) - INTERVAL 12 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now64(3) - INTERVAL 1 DAY
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now64(3) - INTERVAL 7 DAY
             ELSE now64(3) - INTERVAL 1 DAY
         END
-    GROUP BY minute
+    GROUP BY minute, prompt_name, prompt_version
     ORDER BY minute ASC
 TYPE ENDPOINT

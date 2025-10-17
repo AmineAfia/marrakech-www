@@ -11,10 +11,13 @@ SQL >
     FROM prompt_executions
     WHERE user_id = {{ String(userId, 'user_001', description='User ID to filter by', required=True) }}
         AND execution_timestamp >= CASE 
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '1h' THEN now() - INTERVAL 1 HOUR
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '24h' THEN now() - INTERVAL 1 DAY
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '7d' THEN now() - INTERVAL 7 DAY
-            WHEN {{ String(timeframe, '24h', description='Timeframe: 1h, 24h, 7d, 30d', required=False) }} = '30d' THEN now() - INTERVAL 30 DAY
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '5m' THEN now() - INTERVAL 5 MINUTE
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '15m' THEN now() - INTERVAL 15 MINUTE
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '1h' THEN now() - INTERVAL 1 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '6h' THEN now() - INTERVAL 6 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '12h' THEN now() - INTERVAL 12 HOUR
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '24h' THEN now() - INTERVAL 1 DAY
+            WHEN {{ String(timeframe, '24h', description='Timeframe: 5m, 15m, 1h, 6h, 12h, 24h, 7d', required=False) }} = '7d' THEN now() - INTERVAL 7 DAY
             ELSE now() - INTERVAL 1 DAY
         END
 TYPE ENDPOINT
