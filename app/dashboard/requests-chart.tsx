@@ -37,13 +37,20 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         const result = await response.json()
         
         // Transform Tinybird data to chart format
-        const transformedData = result.data?.map((item: { minute: string; execution_count: number }) => ({
-          time: new Date(item.minute).toLocaleTimeString('en-US', { 
+        const transformedData = result.data?.map((item: { minute: string; execution_count: number }) => {
+          // Parse UTC timestamp and convert to user's local timezone
+          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
+          const localTime = utcDate.toLocaleTimeString('en-US', { 
             hour: '2-digit', 
-            minute: '2-digit' 
-          }),
-          executions: item.execution_count
-        })) || []
+            minute: '2-digit'
+            // Defaults to browser's local timezone
+          })
+          
+          return {
+            time: localTime,
+            executions: item.execution_count
+          }
+        }) || []
         
         setChartData(transformedData)
       } catch (err) {

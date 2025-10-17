@@ -1,31 +1,40 @@
 import { z } from 'zod'
 
+// Helper function to convert any valid datetime string to UTC ISO 8601
+const toUTCString = (dateStr: string): string => {
+	const date = new Date(dateStr);
+	if (Number.isNaN(date.getTime())) {
+		throw new Error(`Invalid date format: ${dateStr}`);
+	}
+	return date.toISOString();
+};
+
 // Tool Call Schema - matches tool_calls datasource
 export const ToolCallSchema = z.object({
-  cost_usd: z.number(),
-  execution_id: z.string(),
-  execution_time_ms: z.number(),
-  input_tokens: z.number(),
-  output_tokens: z.number(),
-  prompt_id: z.string(),
-  status: z.string(),
-  tool_call_id: z.string(),
-  tool_call_timestamp: z.string().datetime().optional(), // Will default to now() in Tinybird
-  tool_name: z.string(),
-  error_message: z.string().nullable().optional(),
-})
+	cost_usd: z.number(),
+	execution_id: z.string(),
+	execution_time_ms: z.number(),
+	input_tokens: z.number(),
+	output_tokens: z.number(),
+	prompt_id: z.string(),
+	status: z.string(),
+	tool_call_id: z.string(),
+	tool_call_timestamp: z.string().datetime().transform(toUTCString).optional(), // Convert to UTC ISO 8601
+	tool_name: z.string(),
+	error_message: z.string().nullable().optional(),
+});
 
 // Prompt Metadata Schema - matches prompt_metadata datasource
 export const PromptMetadataSchema = z.object({
 	account_id: z.string(),
-	created_at: z.string().datetime().optional(),
+	created_at: z.string().datetime().transform(toUTCString).optional(),
 	description: z.string(),
 	is_active: z.number().min(0).max(1),
 	name: z.string(),
 	organization_id: z.string(),
 	prompt_id: z.string(),
 	prompt_text: z.string(),
-	updated_at: z.string().datetime(),
+	updated_at: z.string().datetime().transform(toUTCString),
 	version: z.string(),
 });
 
@@ -35,7 +44,7 @@ export const PromptExecutionSchema = z.object({
 	cost_usd: z.number(),
 	execution_id: z.string(),
 	execution_time_ms: z.number(),
-	execution_timestamp: z.string().datetime().optional(),
+	execution_timestamp: z.string().datetime().transform(toUTCString).optional(),
 	model: z.string(),
 	organization_id: z.string(),
 	prompt_id: z.string(),

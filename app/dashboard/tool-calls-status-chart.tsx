@@ -57,9 +57,12 @@ export function ToolCallsStatusChart({ timeRange }: ToolCallsStatusChartProps) {
         const dataMap = new Map<string, Record<string, string | number>>()
         
         for (const item of result.data || []) {
-          const timeKey = new Date(item.minute).toLocaleTimeString('en-US', { 
+          // Parse UTC timestamp and convert to user's local timezone
+          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
+          const timeKey = utcDate.toLocaleTimeString('en-US', { 
             hour: '2-digit', 
-            minute: '2-digit' 
+            minute: '2-digit'
+            // Defaults to browser's local timezone
           })
           
           if (!dataMap.has(timeKey)) {
