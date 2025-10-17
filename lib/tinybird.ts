@@ -52,10 +52,31 @@ async function sendSingleRecordToTinybird(
 			throw new Error(`Tinybird API error: ${response.status} - ${errorText}`);
 		}
 
-		const result = await response.json();
+		// Check if response has content before parsing JSON
+		const responseText = await response.text();
+		if (!responseText.trim()) {
+			// Empty response - this might be expected for some Tinybird endpoints
+			return {
+				success: true,
+				message: `Successfully sent record to ${tableName}`,
+			};
+		}
+
+		// Try to parse as JSON, but handle non-JSON responses gracefully
+		let result: { quarantined_rows?: number } | null;
+		try {
+			result = JSON.parse(responseText);
+		} catch (parseError) {
+			// If it's not JSON, treat it as a successful response with the text as message
+			console.warn(`[Tinybird] Non-JSON response from ${tableName}:`, responseText);
+			return {
+				success: true,
+				message: `Successfully sent record to ${tableName} (non-JSON response)`,
+			};
+		}
 
 		// Check if data was quarantined
-		if (result.quarantined_rows > 0) {
+		if (result?.quarantined_rows && result.quarantined_rows > 0) {
 			console.warn(
 				"⚠️ [Tinybird Debug]",
 				result.quarantined_rows,
@@ -77,7 +98,80 @@ async function sendSingleRecordToTinybird(
 }
 
 /**
- * Send multiple records to a specific Tinybird table (one by one)
+ * Send a batch of records to a specific Tinybird table using NDJSON format
+ */
+async function sendBatchToTinybird(
+	tableName: string,
+	data: Record<string, unknown>[],
+): Promise<TinybirdResponse> {
+	try {
+		// Convert array to NDJSON format (newline-delimited JSON)
+		const ndjson = data.map((record) => JSON.stringify(record)).join("\n");
+
+		const response = await fetch(
+			`${TINYBIRD_BASE_URL}/v0/events?name=${tableName}`,
+			{
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${TINYBIRD_TOKEN}`,
+					"Content-Type": "application/json",
+				},
+				body: ndjson,
+			},
+		);
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			throw new Error(`Tinybird API error: ${response.status} - ${errorText}`);
+		}
+
+		// Check if response has content before parsing JSON
+		const responseText = await response.text();
+		if (!responseText.trim()) {
+			// Empty response - this might be expected for some Tinybird endpoints
+			return {
+				success: true,
+				message: `Successfully sent batch of ${data.length} records to ${tableName}`,
+			};
+		}
+
+		// Try to parse as JSON, but handle non-JSON responses gracefully
+		let result: { quarantined_rows?: number } | null;
+		try {
+			result = JSON.parse(responseText);
+		} catch (parseError) {
+			// If it's not JSON, treat it as a successful response with the text as message
+			console.warn(`[Tinybird] Non-JSON response from ${tableName}:`, responseText);
+			return {
+				success: true,
+				message: `(non-JSON response) ⚠️ sent batch of ${data.length} records to ${tableName}`,
+			};
+		}
+
+		// Check if data was quarantined
+		if (result?.quarantined_rows && result.quarantined_rows > 0) {
+			console.warn(
+				"⚠️ [Tinybird Debug]",
+				result.quarantined_rows,
+				"rows quarantined for",
+				`${tableName}. This usually means schema mismatch.`,
+			);
+		}
+
+		return {
+			success: true,
+			message: `Successfully sent batch of ${data.length} records to ${tableName}`,
+		};
+	} catch (error) {
+		return {
+			success: false,
+			error: error instanceof Error ? error.message : "Unknown error occurred",
+		};
+	}
+}
+
+/**
+ * Send multiple records to a specific Tinybird table (batch first, then fallback to individual)
  */
 async function sendToTinybird(
 	tableName: string,
@@ -86,6 +180,22 @@ async function sendToTinybird(
 	if (data.length === 0) {
 		return { success: true, message: "No data to send" };
 	}
+
+	// First attempt: try batch submission
+	console.log(
+		`[Tinybird] Attempting batch submission for ${tableName} (${data.length} records)`,
+	);
+	const batchResult = await sendBatchToTinybird(tableName, data);
+
+	if (batchResult.success) {
+		console.log(`[Tinybird] Batch submission successful for ${tableName}`);
+		return batchResult;
+	}
+
+	// Fallback: send each record individually
+	console.warn(
+		`[Tinybird] Batch submission failed for ${tableName}, falling back to individual records. Error: ${batchResult.error}`,
+	);
 
 	const results: TinybirdResponse[] = [];
 	const errors: string[] = [];
@@ -106,8 +216,8 @@ async function sendToTinybird(
 	return {
 		success,
 		message: success
-			? `Successfully sent ${successfulRecords}/${data.length} records to ${tableName}`
-			: `Failed to send ${errors.length}/${data.length} records to ${tableName}`,
+			? `Successfully sent ${successfulRecords}/${data.length} records to ${tableName} (fallback mode)`
+			: `Failed to send ${errors.length}/${data.length} records to ${tableName} (fallback mode)`,
 		error: errors.length > 0 ? errors.join("; ") : undefined,
 	};
 }
