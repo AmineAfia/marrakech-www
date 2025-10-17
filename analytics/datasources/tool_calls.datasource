@@ -1,5 +1,6 @@
 DESCRIPTION >
     Generated from /Users/amine/Projects/solo/marrakesh-www/analytics/tmp-seed-data/tool_calls.ndjson
+    All timestamps are stored in UTC timezone for consistent global access.
 
 SCHEMA >
     cost_usd Float32 `json:$.cost_usd`,
@@ -10,7 +11,10 @@ SCHEMA >
     prompt_id String `json:$.prompt_id`,
     status String `json:$.status`,
     tool_call_id String `json:$.tool_call_id`,
-    tool_call_timestamp DateTime `json:$.tool_call_timestamp` DEFAULT now(),
+    tool_call_timestamp DateTime64(3) `json:$.tool_call_timestamp` DEFAULT now64(3),
     tool_name String `json:$.tool_name`,
     user_id String `json:$.user_id`,
     error_message Nullable(String) `json:$.error_message`
+
+FORWARD_QUERY >
+  SELECT cost_usd, execution_id, execution_time_ms, input_tokens, output_tokens, prompt_id, status, tool_call_id, CAST(tool_call_timestamp, 'DateTime64(3)') AS tool_call_timestamp, tool_name, user_id, error_message

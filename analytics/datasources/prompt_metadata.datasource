@@ -1,15 +1,19 @@
 DESCRIPTION >
     Generated from /Users/amine/Projects/solo/marrakesh-www/analytics/tmp-seed-data/prompt_metadata.ndjson
+    All timestamps are stored in UTC timezone for consistent global access.
 
 SCHEMA >
     account_id String `json:$.account_id`,
-    created_at DateTime `json:$.created_at` DEFAULT now(),
+    created_at DateTime64(3) `json:$.created_at` DEFAULT now64(3),
     description String `json:$.description`,
     is_active UInt8 `json:$.is_active`,
     name String `json:$.name`,
     organization_id String `json:$.organization_id`,
     prompt_id String `json:$.prompt_id`,
     prompt_text String `json:$.prompt_text`,
-    updated_at DateTime `json:$.updated_at`,
+    updated_at DateTime64(3) `json:$.updated_at`,
     user_id String `json:$.user_id`,
     version String `json:$.version`
+
+FORWARD_QUERY >
+  SELECT account_id, CAST(created_at, 'DateTime64(3)') AS created_at, description, is_active, name, organization_id, prompt_id, prompt_text, CAST(updated_at, 'DateTime64(3)') AS updated_at, user_id, version

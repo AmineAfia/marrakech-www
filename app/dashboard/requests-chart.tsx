@@ -37,13 +37,20 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         const result = await response.json()
         
         // Transform Tinybird data to chart format
-        const transformedData = result.data?.map((item: { minute: string; execution_count: number }) => ({
-          time: new Date(item.minute).toLocaleTimeString('en-US', { 
+        const transformedData = result.data?.map((item: { minute: string; execution_count: number }) => {
+          // Parse UTC timestamp and convert to user's local timezone
+          const utcDate = new Date(`${item.minute}Z`) // Ensure it's treated as UTC
+          const localTime = utcDate.toLocaleTimeString('en-US', { 
             hour: '2-digit', 
-            minute: '2-digit' 
-          }),
-          executions: item.execution_count
-        })) || []
+            minute: '2-digit'
+            // Defaults to browser's local timezone
+          })
+          
+          return {
+            time: localTime,
+            executions: item.execution_count
+          }
+        }) || []
         
         setChartData(transformedData)
       } catch (err) {
@@ -98,14 +105,8 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+        <ChartContainer config={chartConfig} className="min-h-[300px] w-full" ref={null} id="requests-chart">
           <AreaChart accessibilityLayer data={chartData}>
-            <defs>
-              <linearGradient id="gradient-executions" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="hsl(262, 83%, 58%)" stopOpacity={0.1}/>
-              </linearGradient>
-            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="time"
@@ -129,8 +130,8 @@ export function RequestsChart({ timeRange }: RequestsChartProps) {
               type="monotone" 
               dataKey="executions" 
               stroke="hsl(262, 83%, 58%)" 
-              fill="url(#gradient-executions)" 
-              strokeWidth={2}
+              fill="hsl(262, 83%, 58%, 0.225)" 
+              strokeWidth={1}
             />
           </AreaChart>
         </ChartContainer>

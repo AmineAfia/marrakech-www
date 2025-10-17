@@ -15,7 +15,6 @@ const testData = {
       prompt_id: "prompt_123",
       status: "OK",
       tool_call_id: "tool_call_123",
-      tool_call_timestamp: "2025-10-15T10:11:12Z",
       tool_name: "my_tool",
       error_message: null
     }
@@ -40,7 +39,6 @@ const testData = {
       cost_usd: 0.123,
       execution_id: "exec456",
       execution_time_ms: 150,
-      execution_timestamp: "2025-10-15T10:00:00Z",
       model: "gpt-3.5-turbo",
       organization_id: "org789",
       prompt_id: "prompt101",

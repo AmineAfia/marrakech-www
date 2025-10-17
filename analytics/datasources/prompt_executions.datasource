@@ -1,12 +1,13 @@
 DESCRIPTION >
     Generated from /Users/amine/Projects/solo/marrakesh-www/analytics/tmp-seed-data/prompt_executions.ndjson
+    All timestamps are stored in UTC timezone for consistent global access.
 
 SCHEMA >
     account_id String `json:$.account_id`,
     cost_usd Float32 `json:$.cost_usd`,
     execution_id String `json:$.execution_id`,
     execution_time_ms Int32 `json:$.execution_time_ms`,
-    execution_timestamp DateTime `json:$.execution_timestamp` DEFAULT now(),
+    execution_timestamp DateTime64(3) `json:$.execution_timestamp` DEFAULT now64(3),
     model String `json:$.model`,
     organization_id String `json:$.organization_id`,
     prompt_id String `json:$.prompt_id`,
@@ -19,3 +20,6 @@ SCHEMA >
     status String `json:$.status`,
     user_id String `json:$.user_id`,
     error_message Nullable(String) `json:$.error_message`
+
+FORWARD_QUERY >
+  SELECT account_id, cost_usd, execution_id, execution_time_ms, CAST(execution_timestamp, 'DateTime64(3)') AS execution_timestamp, model, organization_id, prompt_id, prompt_name, prompt_version, region, request_tokens, response_tokens, session_id, status, user_id, error_message
