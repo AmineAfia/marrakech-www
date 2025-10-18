@@ -34,7 +34,7 @@ export const changelogEntries: ChangelogEntry[] = [
           <li><strong>Real-time Learning</strong>: Dynamic adaptation during conversations</li>
         </ul>
 
-        <Accordion type="multiple" collapsible className="w-full not-prose">
+        <Accordion type="multiple"  className="w-full not-prose">
           <AccordionItem value="item-1">
             <AccordionTrigger>Features</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
@@ -86,7 +86,7 @@ export const changelogEntries: ChangelogEntry[] = [
           <li><strong>Custom Dashboards</strong>: Create personalized views for different team roles</li>
         </ul>
 
-        <Accordion type="multiple" collapsible className="w-full not-prose">
+        <Accordion type="multiple"  className="w-full not-prose">
           <AccordionItem value="item-1">
             <AccordionTrigger>Analytics Features</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
@@ -138,7 +138,7 @@ export const changelogEntries: ChangelogEntry[] = [
           <li><strong>Custom Dashboards</strong>: Create personalized views for different team roles</li>
         </ul>
 
-        <Accordion type="multiple" collapsible className="w-full not-prose">
+        <Accordion type="multiple"  className="w-full not-prose">
           <AccordionItem value="item-1">
             <AccordionTrigger>Analytics Features</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
@@ -197,7 +197,7 @@ export const changelogEntries: ChangelogEntry[] = [
           <li><strong>API Security</strong>: Enhanced API authentication with rate limiting</li>
         </ul>
 
-        <Accordion type="multiple" collapsible className="w-full not-prose">
+        <Accordion type="multiple"  className="w-full not-prose">
           <AccordionItem value="item-1">
             <AccordionTrigger>New Security Features</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
@@ -257,7 +257,7 @@ export const changelogEntries: ChangelogEntry[] = [
           <li><strong>Push Notifications</strong>: Real-time alerts for important updates</li>
         </ul>
 
-        <Accordion type="multiple" collapsible className="w-full not-prose">
+        <Accordion type="multiple"  className="w-full not-prose">
           <AccordionItem value="item-1">
             <AccordionTrigger>Mobile Features</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
@@ -316,7 +316,7 @@ export const changelogEntries: ChangelogEntry[] = [
           <li><strong>Interactive Documentation</strong>: Live API explorer with code examples</li>
         </ul>
 
-        <Accordion type="multiple" collapsible className="w-full not-prose">
+        <Accordion type="multiple"  className="w-full not-prose">
           <AccordionItem value="item-1">
             <AccordionTrigger>New API Features</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-4 text-balance">
