@@ -41,16 +41,33 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const { data: session, isPending } = useSession()
   const pathname = usePathname()
 
-  // Check if current route should show sidebar
-  const shouldShowSidebar = () => {
-    // Always show sidebar for protected routes if user is authenticated
-    if (session?.user && PROTECTED_ROUTES.some(route => pathname.startsWith(route))) {
-      return true
+  // Check if current route is public
+  const isPublicRoute = PUBLIC_ROUTES.some(route => {
+    if (route === '/') {
+      return pathname === '/'
     }
-    
+    return pathname.startsWith(route)
+  })
+  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
+  
+  
+  // Show loading spinner for protected routes while checking session
+  if (isPending && isProtectedRoute) {
+    return (
+      <div className="min-h-screen w-full dark:bg-black bg-white dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
+      </div>
+    )
+  }
+
+  // Determine if we should show sidebar
+  const shouldShowSidebar = () => {
     // Don't show sidebar for public routes
-    if (PUBLIC_ROUTES.some(route => pathname.startsWith(route))) {
-      return false
+    if (isPublicRoute) return false
+    
+    // For protected routes, show sidebar if user is authenticated
+    if (isProtectedRoute) {
+      return !!session?.user
     }
     
     // For any other route, show sidebar if user is authenticated
@@ -59,14 +76,6 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
 
   const showSidebar = shouldShowSidebar()
 
-  // Show loading state while checking session
-  if (isPending) {
-    return (
-      <div className="min-h-screen w-full dark:bg-black bg-white dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
-      </div>
-    )
-  }
 
   // Show sidebar layout for authenticated users on non-public routes
   if (showSidebar) {
@@ -85,6 +94,19 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
             </div>
           </SidebarInset>
         </SidebarProvider>
+      </div>
+    )
+  }
+
+  // Special case: If we're on a protected route but session is not loaded yet,
+  // show loading instead of the public layout
+  if (isProtectedRoute && !session?.user && !isPending) {
+    return (
+      <div className="min-h-screen w-full dark:bg-black bg-white dark:bg-grid-small-white/[0.2] bg-grid-small-black/[0.2] relative flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
       </div>
     )
   }
