@@ -16,7 +16,7 @@ export default function FeaturesSectionDemo() {
         "col-span-1 lg:col-span-3 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      title: "Works with all major AI SDKs",
+      title: "Works with all major models",
       description:
         "Formatted prompts from Vercel AI SDK, OpenAI, and Anthropic without reading endless documentation.",
       skeleton: <SkeletonFormatted />,
