@@ -1,5 +1,6 @@
-import { SignInButton, SignInFallback } from "@/components/sign-in-btn";
-import { Suspense } from "react";
+"use client";
+
+import { SignInFallbackClient } from "@/components/sign-in-fallback-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +9,7 @@ import { CodeComparison } from "@/components/ui/code-comparison";
 import { Code2, Eye, Heart, ArrowRight, Copy, CheckCircle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default async function Home() {
+export default function Home() {
 	return (
 		<div className="relative">
 			{/* Hero Section */}
@@ -31,9 +32,7 @@ export default async function Home() {
 						Your AI makes dozens of decisions per conversation. Tool calls, structured outputs, prompt variations. See them all.
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-						<Suspense fallback={<SignInFallback />}>
-							<SignInButton />
-						</Suspense>
+						<SignInFallbackClient />
 						<Button variant="outline" size="lg">
 							View Demo
 						</Button>
@@ -211,9 +210,7 @@ Return JSON: {temp: number, conditions: string}\`;
 						Start seeing your AI in production
 					</h2>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-						<Suspense fallback={<SignInFallback />}>
-							<SignInButton />
-						</Suspense>
+						<SignInFallbackClient />
 					</div>
 					<p className="text-xs text-muted-foreground">
 						npm install marrakech-sdk • Free tier available

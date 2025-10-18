@@ -302,7 +302,15 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut()}>
+            <DropdownMenuItem onClick={async () => {
+              await signOut({
+                fetchOptions: {
+                  onSuccess() {
+                    router.push("/");
+                  },
+                },
+              });
+            }}>
               <LogOut />
               Log out
             </DropdownMenuItem>
