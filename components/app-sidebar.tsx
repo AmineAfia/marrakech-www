@@ -7,10 +7,12 @@ import {
   Shield,
   Users,
   Building2,
-  Bot,
-  Brain,
-  FileText,
   Key,
+  BarChart3,
+  Zap,
+  Users2,
+  Wrench,
+  DollarSign,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -38,24 +40,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/dashboard",
         icon: LayoutDashboard,
         isActive: true,
-      },
-      {
-        title: "Agents",
-        url: "/agents",
-        icon: Bot,
-        isActive: false,
-      },
-      {
-        title: "LLMs",
-        url: "/llms",
-        icon: Brain,
-        isActive: false,
-      },
-      {
-        title: "Prompt Management",
-        url: "/prompt-management",
-        icon: FileText,
-        isActive: false,
+        items: [
+          {
+            title: "Overview",
+            url: "/dashboard/overview",
+          },
+          {
+            title: "Prompts & Performance",
+            url: "/dashboard/prompts",
+          },
+          {
+            title: "Usage & Users",
+            url: "/dashboard/usage",
+          },
+          {
+            title: "Tools & Infrastructure",
+            url: "/dashboard/tools",
+          },
+          {
+            title: "Cost & Efficiency",
+            url: "/dashboard/cost",
+          },
+        ],
       },
       {
         title: "API Keys",
