@@ -9,6 +9,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { Wrapper } from "@/components/wrapper"
+import { Footer } from "@/components/footer"
 
 // Routes that should NOT show the sidebar (public routes)
 const PUBLIC_ROUTES = [
@@ -80,6 +81,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
               <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
                 {children}
               </div>
+              <Footer variant="minimal" />
             </div>
           </SidebarInset>
         </SidebarProvider>
