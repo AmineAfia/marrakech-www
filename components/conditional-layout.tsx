@@ -23,6 +23,7 @@ const PUBLIC_ROUTES = [
   '/client-test',
   '/accept-invitation',
   '/oauth/authorize',
+  '/changelog',
 ]
 
 // Routes that should show sidebar even if they might be partially public

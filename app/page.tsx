@@ -25,7 +25,7 @@ export default function Home() {
 				className="pt-16"
 			>
 				{/* Badge */}
-				<div className="mb-4 flex justify-center">
+				{/* <div className="mb-4 flex justify-center">
 					<div className={cn(
 						"group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800 inline-block"
 					)}>
@@ -34,13 +34,15 @@ export default function Home() {
 							<ArrowRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
 						</AnimatedShinyText>
 					</div>
-				</div>
+				</div> */}
 
 				{/* Custom Action Buttons */}
 				<div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
 					<SignInFallbackClient />
-					<Button variant="outline" size="lg">
-						View Demo
+					<Button variant="outline" size="lg" asChild>
+						<a href="https://github.com/AmineAfia/marrakech" target="_blank" rel="noopener noreferrer">
+							Documentation
+						</a>
 					</Button>
 				</div>
 
