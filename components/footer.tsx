@@ -40,7 +40,7 @@ function LandingFooter() {
               <Logo className="w-6 h-6" />
               <span className="font-semibold">MARRAKECH</span>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground">
               Build AI products users love to interact with
             </p>
           </div>
@@ -49,9 +49,9 @@ function LandingFooter() {
           <div>
             <h3 className="font-semibold mb-4 text-sm">Product</h3>
             <ul className="space-y-3">
-              <li><Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
-              <li><Link href="https://github.com/your-org/marrakech-sdk" className="text-sm text-muted-foreground hover:text-foreground transition-colors">SDK</Link></li>
-              <li><Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Pricing</Link></li>
+              <li><Link href="/dashboard" className="text-sm text-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
+              <li><Link href="https://github.com/your-org/marrakech-sdk" className="text-sm text-foreground hover:text-foreground transition-colors">SDK</Link></li>
+              <li><Link href="/pricing" className="text-sm text-foreground hover:text-foreground transition-colors">Pricing</Link></li>
             </ul>
           </div>
 
@@ -59,12 +59,12 @@ function LandingFooter() {
           <div>
             <h3 className="font-semibold mb-4 text-sm">Developers</h3>
             <ul className="space-y-3">
-              <li><Link href="https://status.marrakech.dev" target="_blank" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+              <li><Link href="https://status.marrakech.dev" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors flex items-center gap-2">
                 <span className="w-2 h-2 bg-green-500 rounded-full" />
                 Status
               </Link></li>
-              <li><Link href="https://docs.marrakech.dev" target="_blank" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Documentation</Link></li>
-              <li><Link href="https://github.com/your-org/marrakech-sdk" target="_blank" className="text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</Link></li>
+              <li><Link href="https://docs.marrakech.dev" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">Documentation</Link></li>
+              <li><Link href="https://github.com/your-org/marrakech-sdk" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">GitHub</Link></li>
             </ul>
           </div>
 
@@ -72,21 +72,21 @@ function LandingFooter() {
           <div>
             <h3 className="font-semibold mb-4 text-sm">Company</h3>
             <ul className="space-y-3">
-              <li><Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link></li>
-              <li><Link href="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
-              <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link></li>
+              <li><Link href="/about" className="text-sm text-foreground hover:text-foreground transition-colors">About</Link></li>
+              <li><Link href="/changelog" className="text-sm text-foreground hover:text-foreground transition-colors">Changelog</Link></li>
+              <li><Link href="/blog" className="text-sm text-foreground hover:text-foreground transition-colors">Blog</Link></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-foreground">
             © {new Date().getFullYear()} Marrakech. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
-            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
+            <Link href="/privacy" className="text-xs text-foreground hover:text-foreground transition-colors">Privacy</Link>
+            <Link href="/terms" className="text-xs text-foreground hover:text-foreground transition-colors">Terms</Link>
           </div>
         </div>
       </div>
