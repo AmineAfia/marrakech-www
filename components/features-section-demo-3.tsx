@@ -46,8 +46,8 @@ export default function FeaturesSectionDemo() {
     },
   ];
   return (
-    <div className="relative z-20 py-10 lg:py-40 max-w-7xl mx-auto">
-      <div className="px-4">
+    <div className="relative z-20 pb-10 lg:pb-40 max-w-7xl mx-auto">
+      {/* <div className="px-4">
         <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
           Everything you need to build better AI
         </h4>
@@ -55,7 +55,7 @@ export default function FeaturesSectionDemo() {
         <p className="text-sm lg:text-base  max-w-2xl  my-4 mx-auto text-neutral-500 text-center font-normal dark:text-neutral-300">
           From clean code to deep insights - understand your AI like never before
         </p>
-      </div>
+      </div> */}
 
       <div className="relative ">
         <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">
@@ -80,7 +80,7 @@ const FeatureCard = ({
   className?: string;
 }) => {
   return (
-    <div className={cn(`p-4 sm:p-8 relative overflow-hidden`, className)}>
+    <div className={cn("p-4 sm:p-8 relative overflow-hidden", className)}>
       {children}
     </div>
   );
