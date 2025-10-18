@@ -2,110 +2,78 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { StackedBarChart } from "@/components/charts";
+import { type ChartConfig } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 
 export function SkeletonAnalytics() {
+  const chartConfig = {
+    success: {
+      label: "Success",
+      color: "hsl(142, 76%, 36%)",
+    },
+    failed: {
+      label: "Failed", 
+      color: "hsl(0, 84%, 60%)",
+    },
+    timeout: {
+      label: "Timeout",
+      color: "hsl(25, 95%, 53%)",
+    },
+    rateLimited: {
+      label: "Rate Limited",
+      color: "hsl(262, 83%, 58%)",
+    },
+    error: {
+      label: "Error",
+      color: "hsl(0, 0%, 45%)",
+    },
+  } satisfies ChartConfig;
+
   const chartData = [
-    { name: "Mon", value: 2400 },
-    { name: "Tue", value: 1398 },
-    { name: "Wed", value: 9800 },
-    { name: "Thu", value: 3908 },
-    { name: "Fri", value: 4800 },
-    { name: "Sat", value: 3800 },
-    { name: "Sun", value: 4300 },
-  ];
-
-  const lineData = [
-    { name: "1", value: 65 },
-    { name: "2", value: 78 },
-    { name: "3", value: 82 },
-    { name: "4", value: 75 },
-    { name: "5", value: 88 },
-    { name: "6", value: 92 },
-  ];
-
-  const metrics = [
-    { label: "Success Rate", value: "98.2%", color: "text-green-600" },
-    { label: "Avg Latency", value: "1.2s", color: "text-blue-600" },
-    { label: "Total Calls", value: "12.4k", color: "text-purple-600" },
+    { time: "2024-01-15T09:00:00Z", success: 420, failed: 85, timeout: 35, rateLimited: 28, error: 18 },
+    { time: "2024-01-15T12:00:00Z", success: 580, failed: 110, timeout: 48, rateLimited: 35, error: 22 },
+    { time: "2024-01-15T15:00:00Z", success: 450, failed: 95, timeout: 42, rateLimited: 31, error: 15 },
+    { time: "2024-01-15T18:00:00Z", success: 520, failed: 75, timeout: 38, rateLimited: 25, error: 20 },
+    { time: "2024-01-16T09:00:00Z", success: 480, failed: 90, timeout: 40, rateLimited: 33, error: 17 },
+    { time: "2024-01-16T12:00:00Z", success: 610, failed: 120, timeout: 52, rateLimited: 38, error: 25 },
+    { time: "2024-01-16T15:00:00Z", success: 390, failed: 105, timeout: 45, rateLimited: 29, error: 19 },
+    { time: "2024-01-16T18:00:00Z", success: 550, failed: 80, timeout: 36, rateLimited: 27, error: 21 },
   ];
 
   return (
     <div className="relative flex flex-col p-4 gap-4 h-full bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
-      {/* Metrics Cards */}
-      <div className="grid grid-cols-3 gap-2">
-        {metrics.map((metric, index) => (
-          <motion.div
-            key={metric.label}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ 
-              duration: 0.3, 
-              delay: index * 0.1 
-            }}
-            className="bg-neutral-50 dark:bg-neutral-800 p-2 rounded text-center"
-          >
-            <div className={cn("text-xs font-medium", metric.color)}>
-              {metric.value}
-            </div>
-            <div className="text-xs text-neutral-600 dark:text-neutral-400">
-              {metric.label}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Bar Chart */}
+      {/* Chart Title */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="h-20"
+        transition={{ duration: 0.3 }}
+        className="text-sm font-medium text-neutral-700 dark:text-neutral-300"
       >
-        <div className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">
-          Daily Executions
-        </div>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData}>
-            <Bar 
-              dataKey="value" 
-              fill="currentColor" 
-              className="text-blue-500"
-              radius={[2, 2, 0, 0]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+        Tool Calls by Status
       </motion.div>
 
-      {/* Line Chart */}
+      {/* Stacked Bar Chart */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="h-16"
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex-1 min-h-[200px]"
       >
-        <div className="text-xs text-neutral-600 dark:text-neutral-400 mb-2">
-          Performance Trend
-        </div>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={lineData}>
-            <Line 
-              type="monotone" 
-              dataKey="value" 
-              stroke="currentColor" 
-              strokeWidth={2}
-              className="text-green-500"
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        <StackedBarChart
+          data={chartData}
+          config={chartConfig}
+          xAxisKey="time"
+          className="h-full w-full"
+          yAxisFormatter={(value) => value.toLocaleString()}
+        />
       </motion.div>
 
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute top-2 right-2 w-1 h-1 bg-blue-500 rounded-full animate-pulse" />
-        <div className="absolute bottom-2 left-2 w-1 h-1 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-2 right-2 w-1 h-1 bg-green-500 rounded-full animate-pulse" />
+        <div className="absolute bottom-2 left-2 w-1 h-1 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute top-1/2 right-1/4 w-1 h-1 bg-orange-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
     </div>
   );
