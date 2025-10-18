@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
+import { CodeComparison } from "@/components/ui/code-comparison";
 import { Code2, Eye, Heart, ArrowRight, Copy, CheckCircle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -67,49 +68,29 @@ export default async function Home() {
 			{/* Problem Visual */}
 			<section className="py-24 px-6">
 				<div className="max-w-6xl mx-auto">
-					<div className="grid md:grid-cols-2 gap-8">
-						<Card className="border-red-200 dark:border-red-800">
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2 text-red-600">
-									<XCircle className="h-5 w-5" />
-									Without Marrakech
-								</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<pre className="text-xs bg-red-50 dark:bg-red-950 p-4 rounded overflow-x-auto">
-									<code>
-										{`// Messy system prompt
+					<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+						<CardContent className="p-0">
+							<CodeComparison
+								beforeCode={`// Messy system prompt
 const prompt = \`You are a weather assistant.
 You can call getWeather(city: string, units: 'celsius' | 'fahrenheit').
 Return JSON: {temp: number, conditions: string}\`;
 
 // Tools scattered across files
 // Zero visibility into production`}
-									</code>
-								</pre>
-							</CardContent>
-						</Card>
-
-						<Card className="border-green-200 dark:border-green-800">
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2 text-green-600">
-									<CheckCircle className="h-5 w-5" />
-									With Marrakech
-								</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<pre className="text-xs bg-green-50 dark:bg-green-950 p-4 rounded overflow-x-auto">
-									<code>
-										{`const weatherBot = prompt('You are a weather assistant')
+								afterCode={`const weatherBot = prompt('You are a weather assistant')
   .tool(getWeather)
   .output(z.object({ temp: z.number(), conditions: z.string() }));
 
 // Clean, type-safe, observable`}
-									</code>
-								</pre>
-							</CardContent>
-						</Card>
-					</div>
+								language="typescript"
+								filename="weather-bot.ts"
+								lightTheme="github-light"
+								darkTheme="github-dark"
+								highlightColor="rgba(101, 117, 133, 0.16)"
+							/>
+						</CardContent>
+					</Card>
 					<p className="text-center text-xl font-semibold mt-8">
 						From chaos to clarity in one line of code
 					</p>
