@@ -18,7 +18,7 @@ export function Footer({ variant }: { variant?: 'landing' | 'minimal' }) {
   // Auto-detect based on route (fallback)
   const isPublicRoute = ['/', '/sign-in', '/pricing', '/forget-password', 
     '/reset-password', '/two-factor', '/apps/register', '/client-test',
-    '/accept-invitation', '/oauth/authorize'].some(route => 
+    '/accept-invitation', '/oauth/authorize', '/changelog'].some(route => 
       pathname === route || pathname.startsWith(route)
   );
 
@@ -31,7 +31,7 @@ export function Footer({ variant }: { variant?: 'landing' | 'minimal' }) {
 
 function LandingFooter() {
   return (
-    <footer className="border-t border-border bg-background/50 backdrop-blur-sm">
+    <footer className="border-t border-border bg-white dark:bg-black">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Logo & Tagline */}
@@ -73,6 +73,7 @@ function LandingFooter() {
             <h3 className="font-semibold mb-4 text-sm">Company</h3>
             <ul className="space-y-3">
               <li><Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link></li>
+              <li><Link href="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Changelog</Link></li>
               <li><Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</Link></li>
             </ul>
           </div>
