@@ -3,7 +3,9 @@ import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { Code2, Eye, Heart, ArrowRight, Copy, CheckCircle, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default async function Home() {
 	return (
@@ -11,9 +13,16 @@ export default async function Home() {
 			{/* Hero Section */}
 			<section className="min-h-[90vh] flex flex-col items-center justify-center px-6">
 				<div className="max-w-4xl mx-auto text-center">
-					<Badge className="mb-4" variant="secondary">
-						For developers building with AI
-					</Badge>
+					<div className="mb-4 flex justify-center">
+						<div className={cn(
+							"group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800 inline-block"
+						)}>
+							<AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400 mx-auto max-w-none">
+								<span>✨ For developers building with AI</span>
+								<ArrowRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+							</AnimatedShinyText>
+						</div>
+					</div>
 					<h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
 						Stop debugging AI in the dark
 					</h1>
@@ -173,7 +182,7 @@ Return JSON: {temp: number, conditions: string}\`;
 								{"\n  "}<span className="text-gray-400">{"}"}</span>
 								<span className="text-gray-400">);</span>
 								{"\n\n"}
-								<span className="text-gray-500">// That's it. Clean, type-safe, observable.</span>
+								<span className="text-gray-500">{/* That's it. Clean, type-safe, observable. */}</span>
 							</code>
 						</pre>
 					</div>
