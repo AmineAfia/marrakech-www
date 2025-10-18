@@ -42,7 +42,7 @@ export default function FeaturesSectionDemo() {
       description:
         "Get a complete overview of your LLM interactions to optimize cost, performance, and user experience.",
       skeleton: <SkeletonNetworkDiagram />,
-      className: "col-span-1 lg:col-span-6",
+      className: "col-span-1 lg:col-span-6 pl-0",
     },
   ];
   return (
