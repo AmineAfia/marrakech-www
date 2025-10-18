@@ -102,9 +102,6 @@ Return JSON: {temp: number, conditions: string}\`;
 					<div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
 						<SignInFallbackClient />
 					</div>
-					<p className="text-xs text-muted-foreground">
-						npm install marrakech-sdk • Free tier available
-					</p>
 				</div>
 			</section>
 		</div>
