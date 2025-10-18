@@ -8,13 +8,14 @@ import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { CodeComparison } from "@/components/ui/code-comparison";
 import { Code2, Eye, Heart, ArrowRight, Copy, CheckCircle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import FeaturesSectionDemo from "@/components/features-section-demo-3";
 
 export default function Home() {
 	return (
 		<div className="relative">
 			{/* Hero Section */}
-			<section className="min-h-[90vh] flex flex-col items-center justify-center px-6">
-				<div className="max-w-4xl mx-auto text-center">
+			<section className="min-h-[90vh] flex flex-col items-center justify-center px-4 pt-20">
+				<div className="max-w-7xl mx-auto text-center">
 					<div className="mb-4 flex justify-center">
 						<div className={cn(
 							"group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800 inline-block"
@@ -50,7 +51,7 @@ export default function Home() {
 					</div>
 
 					{/* Hero Visual */}
-					<div className="relative max-w-4xl mx-auto">
+					<div className="relative max-w-7xl mx-auto">
 						<Card className="aspect-video bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
 							<CardContent className="p-8 h-full flex items-center justify-center">
 								<div className="text-center">
@@ -65,8 +66,8 @@ export default function Home() {
 			</section>
 
 			{/* Problem Visual */}
-			<section className="py-24 px-6">
-				<div className="max-w-6xl mx-auto">
+			<section className="py-24 px-4">
+				<div className="max-w-7xl mx-auto">
 					<Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
 						<CardContent className="p-0">
 							<CodeComparison
@@ -97,8 +98,8 @@ Return JSON: {temp: number, conditions: string}\`;
 			</section>
 
 			{/* Three Benefits */}
-			<section className="py-24 px-6">
-				<div className="max-w-6xl mx-auto">
+			<section className="py-24 px-4">
+				<div className="max-w-7xl mx-auto">
 					<div className="grid md:grid-cols-3 gap-8">
 						<Card className="transition-all hover:scale-105">
 							<CardHeader className="text-center">
@@ -134,8 +135,8 @@ Return JSON: {temp: number, conditions: string}\`;
 			</section>
 
 			{/* Code Example */}
-			<section className="py-24 px-6 bg-muted/30">
-				<div className="max-w-3xl mx-auto text-center">
+			<section className="py-24 px-4 bg-muted/30">
+				<div className="max-w-7xl mx-auto text-center">
 					<h2 className="text-3xl md:text-4xl font-bold mb-8">
 						Code that makes developers go "wow"
 					</h2>
@@ -173,8 +174,8 @@ Return JSON: {temp: number, conditions: string}\`;
 			</section>
 
 			{/* Dashboard Preview */}
-			<section className="py-24 px-6">
-				<div className="max-w-6xl mx-auto">
+			<section className="py-24 px-4">
+				<div className="max-w-7xl mx-auto">
 					<div className="text-center mb-12">
 						<h2 className="text-3xl md:text-4xl font-bold mb-4">
 							See everything happening in your AI application
@@ -203,9 +204,14 @@ Return JSON: {temp: number, conditions: string}\`;
 				</div>
 			</section>
 
+			{/* Features Section */}
+			<section className="py-24 px-4">
+				<FeaturesSectionDemo />
+			</section>
+
 			{/* Final CTA */}
-			<section className="py-32 px-6">
-				<div className="text-center max-w-2xl mx-auto">
+			<section className="py-32 px-4">
+				<div className="text-center max-w-7xl mx-auto">
 					<h2 className="text-4xl md:text-5xl font-bold mb-6">
 						Start seeing your AI in production
 					</h2>

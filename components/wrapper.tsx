@@ -14,7 +14,7 @@ export function Wrapper(props: { children: React.ReactNode }) {
 			{/* Inner flex column container */}
 			<div className="flex flex-col min-h-screen w-full lg:w-8/12">
 				{/* Header */}
-				<div className="bg-white dark:bg-black border-b py-2 flex justify-between items-center border-border z-50 px-4 md:px-1">
+				<div className="sticky top-0 bg-white dark:bg-black border-b py-2 flex justify-between items-center border-border z-50 px-4">
 					<Link href="/">
 						<div className="flex gap-2 cursor-pointer">
 							<Logo />
@@ -27,7 +27,7 @@ export function Wrapper(props: { children: React.ReactNode }) {
 				</div>
 				
 				{/* Content */}
-				<div className="flex-1 mt-0 lg:w-7/12 w-full mx-auto">
+				<div className="flex-1 mt-0 w-full">
 					{props.children}
 				</div>
 				
