@@ -58,14 +58,49 @@ export const PromptExecutionSchema = z.object({
 	error_message: z.string().nullable().optional(),
 });
 
+// Test Run Schema - matches test_runs datasource
+export const TestRunSchema = z.object({
+	test_run_id: z.string(),
+	prompt_id: z.string(),
+	prompt_name: z.string(),
+	total_tests: z.number().int().nonnegative(),
+	passed_tests: z.number().int().nonnegative(),
+	failed_tests: z.number().int().nonnegative(),
+	duration_ms: z.number().int().nonnegative(),
+	timestamp: z.string().datetime().transform(toUTCString),
+	environment: z.enum(["local", "ci", "production"]),
+	git_commit: z.string().optional(),
+	account_id: z.string().optional(),
+	organization_id: z.string().optional(),
+});
+
+// Test Case Schema - matches test_cases datasource
+export const TestCaseSchema = z.object({
+	test_case_id: z.string(),
+	test_run_id: z.string(),
+	prompt_id: z.string(),
+	input: z.string(),
+	expected_output: z.string().optional(),
+	actual_output: z.string(),
+	passed: z.boolean(),
+	duration_ms: z.number().int().nonnegative(),
+	execution_id: z.string(),
+	error_message: z.string().optional(),
+	timestamp: z.string().datetime().transform(toUTCString).optional(),
+});
+
 // Main ingestion request schema
 export const IngestionRequestSchema = z.object({
-  tool_calls: z.array(ToolCallSchema).optional().default([]),
-  prompt_metadata: z.array(PromptMetadataSchema).optional().default([]),
-  prompt_executions: z.array(PromptExecutionSchema).optional().default([]),
-})
+	tool_calls: z.array(ToolCallSchema).optional().default([]),
+	prompt_metadata: z.array(PromptMetadataSchema).optional().default([]),
+	prompt_executions: z.array(PromptExecutionSchema).optional().default([]),
+	test_runs: z.array(TestRunSchema).optional().default([]),
+	test_cases: z.array(TestCaseSchema).optional().default([]),
+});
 
 export type ToolCallData = z.infer<typeof ToolCallSchema>
 export type PromptMetadataData = z.infer<typeof PromptMetadataSchema>
 export type PromptExecutionData = z.infer<typeof PromptExecutionSchema>
+export type TestRunData = z.infer<typeof TestRunSchema>;
+export type TestCaseData = z.infer<typeof TestCaseSchema>;
 export type IngestionRequest = z.infer<typeof IngestionRequestSchema>

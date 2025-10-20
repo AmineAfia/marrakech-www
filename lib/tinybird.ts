@@ -2,6 +2,8 @@ import type {
 	ToolCallData,
 	PromptMetadataData,
 	PromptExecutionData,
+	TestRunData,
+	TestCaseData,
 } from "./ingestion-schemas";
 
 const TINYBIRD_BASE_URL = "https://api.us-east.aws.tinybird.co";
@@ -22,6 +24,8 @@ interface IngestionResult {
 	tool_calls?: TinybirdResponse;
 	prompt_metadata?: TinybirdResponse;
 	prompt_executions?: TinybirdResponse;
+	test_runs?: TinybirdResponse;
+	test_cases?: TinybirdResponse;
 	errors?: string[];
 }
 
@@ -226,53 +230,78 @@ async function sendToTinybird(
  * Ingest data to all Tinybird tables
  */
 export async function ingestData(
-	toolCalls: ToolCallData[],
-	promptMetadata: PromptMetadataData[],
-	promptExecutions: PromptExecutionData[],
-	userId: string,
-): Promise<IngestionResult> {
-	const errors: string[] = [];
+		toolCalls: ToolCallData[],
+		promptMetadata: PromptMetadataData[],
+		promptExecutions: PromptExecutionData[],
+		testRuns: TestRunData[],
+		testCases: TestCaseData[],
+		userId: string,
+	): Promise<IngestionResult> {
+		const errors: string[] = [];
 
-	// Inject user_id into all records
-	const toolCallsWithUserId = toolCalls.map((record) => ({
-		...record,
-		user_id: userId,
-	}));
-	const promptMetadataWithUserId = promptMetadata.map((record) => ({
-		...record,
-		user_id: userId,
-	}));
-	const promptExecutionsWithUserId = promptExecutions.map((record) => ({
-		...record,
-		user_id: userId,
-	}));
+		// Inject user_id into all records
+		const toolCallsWithUserId = toolCalls.map((record) => ({
+			...record,
+			user_id: userId,
+		}));
+		const promptMetadataWithUserId = promptMetadata.map((record) => ({
+			...record,
+			user_id: userId,
+		}));
+		const promptExecutionsWithUserId = promptExecutions.map((record) => ({
+			...record,
+			user_id: userId,
+		}));
+		const testRunsWithUserId = testRuns.map((record) => ({
+			...record,
+			user_id: userId,
+		}));
+		const testCasesWithUserId = testCases.map((record) => ({
+			...record,
+			user_id: userId,
+		}));
 
-	// Send to all tables in parallel
-	const [toolCallsResult, promptMetadataResult, promptExecutionsResult] =
-		await Promise.all([
+		// Send to all tables in parallel
+		const [
+			toolCallsResult,
+			promptMetadataResult,
+			promptExecutionsResult,
+			testRunsResult,
+			testCasesResult,
+		] = await Promise.all([
 			sendToTinybird("tool_calls", toolCallsWithUserId),
 			sendToTinybird("prompt_metadata", promptMetadataWithUserId),
 			sendToTinybird("prompt_executions", promptExecutionsWithUserId),
+			sendToTinybird("test_runs", testRunsWithUserId),
+			sendToTinybird("test_cases", testCasesWithUserId),
 		]);
 
-	// Collect errors
-	if (!toolCallsResult.success) {
-		errors.push(`Tool calls: ${toolCallsResult.error}`);
-	}
-	if (!promptMetadataResult.success) {
-		errors.push(`Prompt metadata: ${promptMetadataResult.error}`);
-	}
-	if (!promptExecutionsResult.success) {
-		errors.push(`Prompt executions: ${promptExecutionsResult.error}`);
-	}
+		// Collect errors
+		if (!toolCallsResult.success) {
+			errors.push(`Tool calls: ${toolCallsResult.error}`);
+		}
+		if (!promptMetadataResult.success) {
+			errors.push(`Prompt metadata: ${promptMetadataResult.error}`);
+		}
+		if (!promptExecutionsResult.success) {
+			errors.push(`Prompt executions: ${promptExecutionsResult.error}`);
+		}
+		if (!testRunsResult.success) {
+			errors.push(`Test runs: ${testRunsResult.error}`);
+		}
+		if (!testCasesResult.success) {
+			errors.push(`Test cases: ${testCasesResult.error}`);
+		}
 
-	const success = errors.length === 0;
+		const success = errors.length === 0;
 
-	return {
-		success,
-		tool_calls: toolCallsResult,
-		prompt_metadata: promptMetadataResult,
-		prompt_executions: promptExecutionsResult,
-		errors: errors.length > 0 ? errors : undefined,
-	};
-}
+		return {
+			success,
+			tool_calls: toolCallsResult,
+			prompt_metadata: promptMetadataResult,
+			prompt_executions: promptExecutionsResult,
+			test_runs: testRunsResult,
+			test_cases: testCasesResult,
+			errors: errors.length > 0 ? errors : undefined,
+		};
+	}

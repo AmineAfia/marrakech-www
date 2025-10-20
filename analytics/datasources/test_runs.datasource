@@ -1,0 +1,19 @@
+DESCRIPTION >
+    Test runs data for Marrakesh prompt testing
+    All timestamps are stored in UTC timezone for consistent global access.
+
+SCHEMA >
+    test_run_id String `json:$.test_run_id`,
+    prompt_id String `json:$.prompt_id`,
+    prompt_name String `json:$.prompt_name`,
+    total_tests Int32 `json:$.total_tests`,
+    passed_tests Int32 `json:$.passed_tests`,
+    failed_tests Int32 `json:$.failed_tests`,
+    duration_ms Int32 `json:$.duration_ms`,
+    timestamp DateTime64(3) `json:$.timestamp` DEFAULT now64(3),
+    environment String `json:$.environment`,
+    git_commit String `json:$.git_commit`,
+    account_id String `json:$.account_id`,
+    organization_id String `json:$.organization_id`,
+    user_id String `json:$.user_id`
+

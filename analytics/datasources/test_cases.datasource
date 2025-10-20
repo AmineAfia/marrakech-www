@@ -1,0 +1,18 @@
+DESCRIPTION >
+    Test cases data for Marrakesh prompt testing
+    All timestamps are stored in UTC timezone for consistent global access.
+
+SCHEMA >
+    test_case_id String `json:$.test_case_id`,
+    test_run_id String `json:$.test_run_id`,
+    prompt_id String `json:$.prompt_id`,
+    input String `json:$.input`,
+    expected_output String `json:$.expected_output`,
+    actual_output String `json:$.actual_output`,
+    passed UInt8 `json:$.passed`,
+    duration_ms Int32 `json:$.duration_ms`,
+    execution_id String `json:$.execution_id`,
+    error_message String `json:$.error_message`,
+    timestamp Nullable(DateTime64(3)) `json:$.timestamp`,
+    user_id String `json:$.user_id`
+

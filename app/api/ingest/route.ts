@@ -33,37 +33,43 @@ export async function POST(request: Request) {
     const validatedData = IngestionRequestSchema.parse(body)
 
     // Ingest data to Tinybird
-    const result = await ingestData(
-      validatedData.tool_calls,
-      validatedData.prompt_metadata,
-      validatedData.prompt_executions,
-      userId
-    )
+				const result = await ingestData(
+					validatedData.tool_calls,
+					validatedData.prompt_metadata,
+					validatedData.prompt_executions,
+					validatedData.test_runs,
+					validatedData.test_cases,
+					userId,
+				);
 
     if (!result.success) {
       return NextResponse.json(
-        {
-          error: 'Data ingestion failed',
-          details: result.errors,
-          results: {
-            tool_calls: result.tool_calls,
-            prompt_metadata: result.prompt_metadata,
-            prompt_executions: result.prompt_executions,
-          }
-        },
-        { status: 500 }
-      )
+							{
+								error: "Data ingestion failed",
+								details: result.errors,
+								results: {
+									tool_calls: result.tool_calls,
+									prompt_metadata: result.prompt_metadata,
+									prompt_executions: result.prompt_executions,
+									test_runs: result.test_runs,
+									test_cases: result.test_cases,
+								},
+							},
+							{ status: 500 },
+						);
     }
 
     return NextResponse.json({
-      success: true,
-      message: 'Data successfully ingested',
-      results: {
-        tool_calls: result.tool_calls,
-        prompt_metadata: result.prompt_metadata,
-        prompt_executions: result.prompt_executions,
-      }
-    })
+					success: true,
+					message: "Data successfully ingested",
+					results: {
+						tool_calls: result.tool_calls,
+						prompt_metadata: result.prompt_metadata,
+						prompt_executions: result.prompt_executions,
+						test_runs: result.test_runs,
+						test_cases: result.test_cases,
+					},
+				});
 
   } catch (error) {
     console.error('Ingestion endpoint error:', error)
