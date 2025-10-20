@@ -26,9 +26,35 @@ export async function POST(request: Request) {
     }
 
     const userId = validation.userId
+    
+    if (!userId) {
+					return NextResponse.json(
+						{ error: "User ID not found in API key validation" },
+						{ status: 401 },
+					);
+				}
 
     // Parse and validate request body
-    const body = await request.json()
+				let body: unknown;
+				try {
+					const text = await request.text();
+					if (!text || text.trim() === "") {
+						return NextResponse.json(
+							{ error: "Request body is empty" },
+							{ status: 400 },
+						);
+					}
+					body = JSON.parse(text);
+				} catch (error) {
+					return NextResponse.json(
+						{
+							error: "Invalid JSON in request body",
+							details:
+								error instanceof Error ? error.message : "Could not parse JSON",
+						},
+						{ status: 400 },
+					);
+				}
     
     const validatedData = IngestionRequestSchema.parse(body)
 

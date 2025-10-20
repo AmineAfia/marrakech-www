@@ -82,7 +82,7 @@ export const TestCaseSchema = z.object({
 	input: z.string(),
 	expected_output: z.string().optional(),
 	actual_output: z.string(),
-	passed: z.boolean(),
+	passed: z.boolean().transform(val => val ? 1 : 0),
 	duration_ms: z.number().int().nonnegative(),
 	execution_id: z.string(),
 	error_message: z.string().optional(),

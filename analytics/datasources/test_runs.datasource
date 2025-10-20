@@ -12,7 +12,7 @@ SCHEMA >
     duration_ms Int32 `json:$.duration_ms`,
     timestamp DateTime64(3) `json:$.timestamp` DEFAULT now64(3),
     environment String `json:$.environment`,
-    git_commit String `json:$.git_commit`,
+    git_commit String `json:$.git_commit` DEFAULT '',
     account_id String `json:$.account_id`,
     organization_id String `json:$.organization_id`,
     user_id String `json:$.user_id`

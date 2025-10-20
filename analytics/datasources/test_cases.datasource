@@ -12,7 +12,7 @@ SCHEMA >
     passed UInt8 `json:$.passed`,
     duration_ms Int32 `json:$.duration_ms`,
     execution_id String `json:$.execution_id`,
-    error_message String `json:$.error_message`,
+    error_message String `json:$.error_message` DEFAULT '',
     timestamp Nullable(DateTime64(3)) `json:$.timestamp`,
     user_id String `json:$.user_id`
 

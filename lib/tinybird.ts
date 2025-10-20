@@ -261,6 +261,14 @@ export async function ingestData(
 			user_id: userId,
 		}));
 
+		// Log test data being processed
+		if (testRuns.length > 0) {
+			console.log(`[Ingestion] Processing ${testRuns.length} test runs for user ${userId}`);
+		}
+		if (testCases.length > 0) {
+			console.log(`[Ingestion] Processing ${testCases.length} test cases for user ${userId}`);
+		}
+
 		// Send to all tables in parallel
 		const [
 			toolCallsResult,
@@ -288,9 +296,15 @@ export async function ingestData(
 		}
 		if (!testRunsResult.success) {
 			errors.push(`Test runs: ${testRunsResult.error}`);
+			console.error(`[Ingestion] Test runs ingestion failed: ${testRunsResult.error}`);
+		} else if (testRuns.length > 0) {
+			console.log(`[Ingestion] Test runs ingestion successful: ${testRunsResult.message}`);
 		}
 		if (!testCasesResult.success) {
 			errors.push(`Test cases: ${testCasesResult.error}`);
+			console.error(`[Ingestion] Test cases ingestion failed: ${testCasesResult.error}`);
+		} else if (testCases.length > 0) {
+			console.log(`[Ingestion] Test cases ingestion successful: ${testCasesResult.message}`);
 		}
 
 		const success = errors.length === 0;
