@@ -21,8 +21,10 @@ export default function FeaturesSectionDemo() {
           <Image
             src="/sdk.png"
             alt="SDK Code Editor showing TypeScript prompt definition with tools and evals"
-            width={800}
-            height={600}
+            width={1600}
+            height={1200}
+            quality={95}
+            priority
             className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity"
           />
         </button>
@@ -49,8 +51,9 @@ export default function FeaturesSectionDemo() {
           <Image
             src="/analytics.png"
             alt="Analytics Dashboard showing execution metrics, charts, and cost analysis"
-            width={800}
-            height={600}
+            width={1600}
+            height={1200}
+            quality={95}
             className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity"
           />
         </button>
@@ -101,8 +104,9 @@ export default function FeaturesSectionDemo() {
             <Image
               src={selectedImage}
               alt="Enlarged view"
-              width={1200}
-              height={900}
+              width={1600}
+              height={1200}
+              quality={95}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
           </div>
