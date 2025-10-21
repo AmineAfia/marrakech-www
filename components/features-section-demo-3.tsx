@@ -1,48 +1,61 @@
 import { cn } from "@/lib/utils";
-import { SkeletonCodeOrganization } from "./skeletons/skeleton-code-organization";
-import { SkeletonFormatted } from "./skeletons/skeleton-formatted";
-import { SkeletonAnalytics } from "./skeletons/skeleton-analytics";
-import { SkeletonUserBehavior } from "./skeletons/skeleton-user-behavior";
-import { SkeletonNetworkDiagram } from "./skeletons/skeleton-network-diagram";
+import { SkeletonEvalsCli } from "./skeletons/skeleton-evals-cli";
+import Image from "next/image";
+import { useState } from "react";
+import { X } from "lucide-react";
 
 export default function FeaturesSectionDemo() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const features = [
     {
-      title: "Organize prompts in code",
+      title: "Define prompts as typed TypeScript code",
       description:
-        "Stop managing prompts in strings and markdown files. Define them as type-safe code with proper tooling.",
-      skeleton: <SkeletonCodeOrganization />,
-      className:
-        "col-span-1 lg:col-span-3 border-b lg:border-r dark:border-neutral-800",
+        "Build AI agents with full type safety. Define system prompts, tools, and outputs in clean, maintainable code.",
+      skeleton: (
+        <button 
+          className="w-full h-full cursor-pointer border-0 bg-transparent p-0" 
+          onClick={() => setSelectedImage("/sdk.png")}
+          type="button"
+        >
+          <Image
+            src="/sdk.png"
+            alt="SDK Code Editor showing TypeScript prompt definition with tools and evals"
+            width={800}
+            height={600}
+            className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity"
+          />
+        </button>
+      ),
+      className: "border-b dark:border-neutral-800",
     },
     {
-      title: "Works with all major models",
+      title: "Test your prompts with evals",
       description:
-        "Formatted prompts from Vercel AI SDK, OpenAI, and Anthropic without reading endless documentation.",
-      skeleton: <SkeletonFormatted />,
-      className: "border-b col-span-1 lg:col-span-3 dark:border-neutral-800",
+        "Run evaluations directly from your CLI. Validate agent behavior with executable test cases before deployment.",
+      skeleton: <SkeletonEvalsCli />,
+      className: "border-b dark:border-neutral-800",
     },
     {
-      title: "Deep execution insights",
+      title: "Track and analyze every execution",
       description:
-        "Understand your prompts, tools, and executions with detailed analytics and real-time monitoring.",
-      skeleton: <SkeletonAnalytics />,
-      className:
-        "col-span-1 lg:col-span-2 border-b lg:border-r dark:border-neutral-800",
-    },
-    {
-      title: "Track user interactions",
-      description:
-        "See how users interact with your agents and prompts. Identify patterns, catch issues, improve experiences.",
-      skeleton: <SkeletonUserBehavior />,
-      className: "col-span-1 lg:col-span-4 border-b dark:border-neutral-800",
-    },
-    {
-      title: "Monitor your LLM ecosystem",
-      description:
-        "Get a complete overview of your LLM interactions to optimize cost, performance, and user experience.",
-      skeleton: <SkeletonNetworkDiagram />,
-      className: "col-span-1 lg:col-span-6 pl-0",
+        "Real-time analytics dashboard for your AI prompts. Monitor performance metrics, system health, and cost analysis.",
+      skeleton: (
+        <button 
+          className="w-full h-full cursor-pointer border-0 bg-transparent p-0" 
+          onClick={() => setSelectedImage("/analytics.png")}
+          type="button"
+        >
+          <Image
+            src="/analytics.png"
+            alt="Analytics Dashboard showing execution metrics, charts, and cost analysis"
+            width={800}
+            height={600}
+            className="w-full h-auto rounded-lg hover:opacity-90 transition-opacity"
+          />
+        </button>
+      ),
+      className: "",
     },
   ];
   return (
@@ -58,7 +71,7 @@ export default function FeaturesSectionDemo() {
       </div> */}
 
       <div className="relative ">
-        <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">
+        <div className="flex flex-col mt-12 xl:border rounded-md dark:border-neutral-800">
           {features.map((feature) => (
             <FeatureCard key={feature.title} className={feature.className}>
               <FeatureTitle>{feature.title}</FeatureTitle>
@@ -68,6 +81,33 @@ export default function FeaturesSectionDemo() {
           ))}
         </div>
       </div>
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <button 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 border-0 cursor-pointer"
+          onClick={() => setSelectedImage(null)}
+          onKeyDown={(e) => e.key === 'Escape' && setSelectedImage(null)}
+          type="button"
+        >
+          <div className="relative max-w-7xl max-h-full">
+            <button
+              type="button"
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <Image
+              src={selectedImage}
+              alt="Enlarged view"
+              width={1200}
+              height={900}
+              className="max-w-full max-h-full object-contain rounded-lg"
+            />
+          </div>
+        </button>
+      )}
     </div>
   );
 }
@@ -88,7 +128,7 @@ const FeatureCard = ({
 
 const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <p className=" max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
+    <p className="text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
       {children}
     </p>
   );
@@ -96,13 +136,7 @@ const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
 
 const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <p
-      className={cn(
-        "text-sm md:text-base  max-w-4xl text-left mx-auto",
-        "text-neutral-500 text-center font-normal dark:text-neutral-300",
-        "text-left max-w-sm mx-0 md:text-sm my-2"
-      )}
-    >
+    <p className="text-sm md:text-base text-left text-neutral-500 font-normal dark:text-neutral-300 my-2">
       {children}
     </p>
   );

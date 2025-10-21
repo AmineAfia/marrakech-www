@@ -7,8 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { CodeComparison } from "@/components/ui/code-comparison";
 import { Hero } from "@/components/blocks/hero";
-import { Code2, Eye, Heart, ArrowRight, Copy, CheckCircle, XCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
 import FeaturesSectionDemo from "@/components/features-section-demo-3";
 
 export default function Home() {
@@ -16,8 +14,8 @@ export default function Home() {
 		<div className="relative">
 			{/* Hero Section */}
 			<Hero
-				title="Stop debugging AI in the dark"
-				subtitle="Your AI makes dozens of decisions per conversation. Tool calls, structured outputs, prompt variations. See them all."
+				title="Context Engineering for developers"
+				subtitle="Build, test and analyse agents behaviour using marrakesh prompts"
 				titleClassName="text-5xl md:text-7xl font-bold tracking-tight"
 				subtitleClassName="text-lg md:text-xl text-muted-foreground max-w-2xl"
 				gradient={true}
@@ -51,9 +49,9 @@ export default function Home() {
 					<p className="text-sm text-muted-foreground mb-4">Works with</p>
 					<div className="flex justify-center items-center gap-6 opacity-60">
 						<div className="text-sm font-mono">Vercel AI SDK</div>
-						<div className="text-sm font-mono">OpenAI</div>
-						<div className="text-sm font-mono">Anthropic</div>
-						<div className="text-sm font-mono">Next.js</div>
+						<div className="text-sm font-mono">OpenAI (soon)</div>
+						<div className="text-sm font-mono">Anthropic (soon)</div>
+						<div className="text-sm font-mono">Langchain (soon)</div>
 					</div>
 				</div>
 			</Hero>
@@ -97,7 +95,7 @@ Return JSON: {temp: number, conditions: string}\`;
 			<section className="py-32 px-4">
 				<div className="text-center max-w-7xl mx-auto">
 					<h2 className="text-4xl md:text-5xl font-bold mb-6">
-						Start seeing your AI in production
+						For you and your coding agents
 					</h2>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
 						<SignInFallbackClient />
