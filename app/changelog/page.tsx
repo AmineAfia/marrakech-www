@@ -1,11 +1,11 @@
 "use client"
 
 import { changelogEntries } from "@/lib/changelog-data"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, Suspense } from "react"
 import { formatDate } from "@/lib/utils"
 import { useSearchParams } from "next/navigation"
 
-export default function ChangelogPage() {
+function ChangelogContent() {
   const searchParams = useSearchParams()
   const entryId = searchParams.get('entry')
   
@@ -137,5 +137,28 @@ export default function ChangelogPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ChangelogPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-transparent relative">
+        <div className="border-b border-border/50">
+          <div className="max-w-5xl mx-auto relative">
+            <div className="p-3 flex items-center justify-between">
+              <h1 className="text-3xl font-semibold tracking-tight">Changelog</h1>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-5xl mx-auto px-6 lg:px-10 pt-10">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Loading changelog...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <ChangelogContent />
+    </Suspense>
   )
 }
