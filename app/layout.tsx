@@ -13,7 +13,7 @@ export const metadata = createMetadata({
 		template: "%s | Marrakesh",
 		default: "Marrakesh",
 	},
-	description: "Marrakesh is a platform for building AI-powered applications",
+	description: "Context Engineering for developers",
 	metadataBase: new URL("https://marrakesh.dev"),
 });
 

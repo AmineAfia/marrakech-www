@@ -7,7 +7,9 @@ export function createMetadata(override: Metadata): Metadata {
 			title: override.title ?? undefined,
 			description: override.description ?? undefined,
 			url: "https://marrakesh.dev",
-			images: "https://marrakesh.dev/og.png",
+			images: override.openGraph?.images
+				? override.openGraph?.images
+				: "https://marrakesh.dev/og.png",
 			siteName: "Marrakesh",
 			...override.openGraph,
 		},
@@ -16,7 +18,9 @@ export function createMetadata(override: Metadata): Metadata {
 			creator: "@eth_chainId",
 			title: override.title ?? undefined,
 			description: override.description ?? undefined,
-			images: "https://marrakesh.dev/og.png",
+			images: override.openGraph?.images
+				? override.openGraph?.images
+				: "https://marrakesh.dev/og.png",
 			...override.twitter,
 		},
 	};
