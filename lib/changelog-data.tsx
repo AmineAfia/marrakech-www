@@ -15,6 +15,38 @@ export interface ChangelogEntry {
   content: () => JSX.Element
 }
 
+export function extractFirstImage(changelog: ChangelogEntry): string | null {
+  // Render the content to get the JSX
+  const content = changelog.content()
+  
+  // Recursively search for img elements
+  const findImage = (element: any): string | null => {
+    if (!element) return null
+    
+    // Check if this is an img element
+    if (element.type === 'img' && element.props?.src) {
+      return element.props.src
+    }
+    
+    // Check children
+    const children = element.props?.children
+    if (children) {
+      if (Array.isArray(children)) {
+        for (const child of children) {
+          const result = findImage(child)
+          if (result) return result
+        }
+      } else {
+        return findImage(children)
+      }
+    }
+    
+    return null
+  }
+  
+  return findImage(content)
+}
+
 export const changelogEntries: ChangelogEntry[] = [
   {
     id: "2025-10-21",
