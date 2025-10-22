@@ -4,8 +4,15 @@ import { SignInFallbackClient } from "@/components/sign-in-fallback-client";
 import { Button } from "@/components/ui/button";
 import { Hero } from "@/components/blocks/hero";
 import FeaturesSectionDemo from "@/components/features-section-demo-3";
+// PostHog will be available via window.posthog
 
 export default function Home() {
+	const handleDocumentationClick = () => {
+		if (typeof window !== "undefined" && window.posthog) {
+			window.posthog.capture("marrakesh_clicked_documentation_button");
+		}
+	};
+
 	return (
 		<div className="relative">
 			{/* Hero Section */}
@@ -34,7 +41,12 @@ export default function Home() {
 				<div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
 					<SignInFallbackClient />
 					<Button variant="outline" size="lg" asChild>
-						<a href="https://github.com/AmineAfia/marrakech" target="_blank" rel="noopener noreferrer">
+						<a 
+							href="https://github.com/AmineAfia/marrakech" 
+							target="_blank" 
+							rel="noopener noreferrer"
+							onClick={handleDocumentationClick}
+						>
 							Documentation
 						</a>
 					</Button>

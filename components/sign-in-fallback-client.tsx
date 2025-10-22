@@ -3,17 +3,28 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useSession } from "@/lib/auth-client";
+// PostHog will be available via window.posthog
 
 export function SignInFallbackClient() {
 	const { data: session, isPending } = useSession();
 	const isSignedIn = !!session?.user;
+
+	const handleClick = () => {
+		if (typeof window !== "undefined" && window.posthog) {
+			if (isSignedIn) {
+				window.posthog.capture("marrakesh_clicked_dashboard_button");
+			} else {
+				window.posthog.capture("marrakesh_clicked_signin_button");
+			}
+		}
+	};
 	
 	return (
 		<Link
 			href={isSignedIn ? "/dashboard" : "/sign-in"}
 			className="flex justify-center"
 		>
-			<Button className="gap-2 justify-between" variant="default">
+			<Button className="gap-2 justify-between" variant="default" onClick={handleClick}>
 				{!isSignedIn ? (
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
