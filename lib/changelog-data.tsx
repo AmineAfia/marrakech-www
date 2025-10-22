@@ -18,7 +18,7 @@ export interface ChangelogEntry {
 export const changelogEntries: ChangelogEntry[] = [
   {
     id: "2025-10-21",
-    title: "Intoruding Marrakesh alpha 1.0",
+    title: "Introducing Marrakesh alpha 1.0",
     description: `
     This is the start of the marrakesh project. The project is aiming to create a new standard for context engineering. 
     The anatomy of a prompt is not the text we input to an LLM, that's just the input to the LLM. 

@@ -1,5 +1,7 @@
+"use client"
+
 import { changelogEntries } from "@/lib/changelog-data"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { formatDate } from "@/lib/utils"
 
 export default function ChangelogPage() {
@@ -9,6 +11,19 @@ export default function ChangelogPage() {
       const dateB = new Date(b.date).getTime()
       return dateB - dateA
     })
+  }, [])
+
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      const id = hash.replace('#', '')
+      const element = document.getElementById(id)
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 100)
+      }
+    }
   }, [])
 
   return (
@@ -39,7 +54,7 @@ export default function ChangelogPage() {
               const Content = changelog.content
 
               return (
-                <div key={changelog.id} className="relative">
+                <div key={changelog.id} className="relative scroll-mt-20" id={changelog.id}>
                   <div className="flex flex-col md:flex-row gap-y-6">
                     <div className="md:w-48 flex-shrink-0">
                       <div className="md:sticky md:top-8 pb-10">
@@ -65,8 +80,16 @@ export default function ChangelogPage() {
 
                       <div className="space-y-6">
                         <div className="relative z-10 flex flex-col gap-2">
-                          <h2 className="text-2xl font-semibold tracking-tight text-balance">
-                            {changelog.title}
+                          <h2 className="text-2xl font-semibold tracking-tight text-balance group">
+                            <a 
+                              href={`#${changelog.id}`}
+                              className="hover:text-primary transition-colors flex items-center gap-2"
+                            >
+                              {changelog.title}
+                              <span className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground">
+                                #
+                              </span>
+                            </a>
                           </h2>
 
                           {/* Tags */}
