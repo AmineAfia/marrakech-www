@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { client, signIn } from "@/lib/auth-client";
 import Link from "next/link";
@@ -21,7 +21,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { getCallbackURL } from "@/lib/shared";
 
-export default function SignIn() {
+function SignInContent() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, startTransition] = useTransition();
@@ -233,5 +233,13 @@ export default function SignIn() {
 				</div>
 			</CardFooter>
 		</Card>
+	);
+}
+
+export default function SignIn() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<SignInContent />
+		</Suspense>
 	);
 }

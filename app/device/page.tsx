@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { client } from "@/lib/auth-client";
 import { Card } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 
-export default function DeviceAuthorizationPage() {
+function DeviceAuthorizationContent() {
 	const router = useRouter();
 	const params = useSearchParams();
 	const user_code = params.get("user_code");
@@ -90,5 +90,13 @@ export default function DeviceAuthorizationPage() {
 				</div>
 			</Card>
 		</div>
+	);
+}
+
+export default function DeviceAuthorizationPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<DeviceAuthorizationContent />
+		</Suspense>
 	);
 }

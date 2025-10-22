@@ -5,11 +5,11 @@ import { SignUp } from "@/components/sign-up";
 import { Tabs } from "@/components/ui/tabs2";
 import { client } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { toast } from "sonner";
 import { getCallbackURL } from "@/lib/shared";
 
-export default function Page() {
+function SignInContent() {
 	const router = useRouter();
 	const params = useSearchParams();
 	useEffect(() => {
@@ -47,5 +47,13 @@ export default function Page() {
 				</div>
 			</div>
 		</div>
+	);
+}
+
+export default function Page() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<SignInContent />
+		</Suspense>
 	);
 }

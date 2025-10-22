@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { Loader2, X } from "lucide-react";
 import { signUp } from "@/lib/auth-client";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getCallbackURL } from "@/lib/shared";
 
-export function SignUp() {
+function SignUpContent() {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [email, setEmail] = useState("");
@@ -197,6 +197,14 @@ export function SignUp() {
 				</div>
 			</CardFooter>
 		</Card>
+	);
+}
+
+export function SignUp() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<SignUpContent />
+		</Suspense>
 	);
 }
 

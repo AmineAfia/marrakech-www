@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { client, useSession } from "@/lib/auth-client";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Check, X } from "lucide-react";
 
-export default function DeviceApprovalPage() {
+function DeviceApprovalContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const userCode = searchParams.get("user_code");
@@ -118,5 +118,13 @@ export default function DeviceApprovalPage() {
 				</div>
 			</Card>
 		</div>
+	);
+}
+
+export default function DeviceApprovalPage() {
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<DeviceApprovalContent />
+		</Suspense>
 	);
 }

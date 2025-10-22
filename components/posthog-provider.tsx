@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 // PostHog will be loaded via script tag in the head
@@ -13,7 +13,7 @@ declare global {
 	}
 }
 
-export function PostHogProvider({ children }: { children: React.ReactNode }) {
+function PostHogContent({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -40,4 +40,12 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 	}, [pathname, searchParams]);
 
 	return <>{children}</>;
+}
+
+export function PostHogProvider({ children }: { children: React.ReactNode }) {
+	return (
+		<Suspense fallback={<>{children}</>}>
+			<PostHogContent>{children}</PostHogContent>
+		</Suspense>
+	);
 }
