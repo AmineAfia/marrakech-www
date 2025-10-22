@@ -46,8 +46,8 @@ The platform uses a sophisticated analytics pipeline:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/AmineAfia/marrakech-www
-   cd marrakech-www
+   git clone https://github.com/AmineAfia/marrakesh-www
+   cd marrakesh-www
    ```
 
 2. **Install dependencies**:

@@ -42,7 +42,7 @@ export default function Home() {
 					<SignInFallbackClient />
 					<Button variant="outline" size="lg" asChild>
 						<a 
-							href="https://github.com/AmineAfia/marrakech" 
+							href="https://github.com/AmineAfia/marrakesh" 
 							target="_blank" 
 							rel="noopener noreferrer"
 							onClick={handleDocumentationClick}
