@@ -1,11 +1,7 @@
 "use client";
 
 import { SignInFallbackClient } from "@/components/sign-in-fallback-client";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import { CodeComparison } from "@/components/ui/code-comparison";
 import { Hero } from "@/components/blocks/hero";
 import FeaturesSectionDemo from "@/components/features-section-demo-3";
 

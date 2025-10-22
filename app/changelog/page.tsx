@@ -48,7 +48,7 @@ export default function ChangelogPage() {
                         </time>
 
                         {changelog.version && (
-                          <div className="inline-flex relative z-10 items-center justify-center w-10 h-10 text-foreground border border-border rounded-lg text-sm font-bold">
+                          <div className="inline-flex relative z-10 items-center justify-center min-w-10 w-auto h-10 px-2 text-foreground border border-border rounded-lg text-xs font-bold">
                             {changelog.version}
                           </div>
                         )}
@@ -86,6 +86,21 @@ export default function ChangelogPage() {
                         </div>
                         <div className="prose dark:prose-invert max-w-none prose-headings:scroll-mt-8 prose-headings:font-semibold prose-a:no-underline prose-headings:tracking-tight prose-headings:text-balance prose-p:tracking-tight prose-p:text-balance">
                           <Content />
+                        </div>
+
+                        {/* Author section */}
+                        <div className="border-t border-border/50">
+                          <a 
+                            href={`https://twitter.com/${changelog.author.handle?.replace('@', '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                          >
+                            <span>{changelog.author.name}</span>
+                            {changelog.author.handle && (
+                              <span>({changelog.author.handle})</span>
+                            )}
+                          </a>
                         </div>
                       </div>
                     </div>
