@@ -16,7 +16,7 @@ export function Footer({ variant }: { variant?: 'landing' | 'minimal' }) {
   }
   
   // Auto-detect based on route (fallback)
-  const isPublicRoute = ['/', '/sign-in', '/pricing', '/forget-password', 
+  const isPublicRoute = ['/', '/sign-in', '/forget-password', 
     '/reset-password', '/two-factor', '/apps/register', '/client-test',
     '/accept-invitation', '/oauth/authorize', '/changelog'].some(route => 
       pathname === route || pathname.startsWith(route)
@@ -50,8 +50,8 @@ function LandingFooter() {
             <h3 className="font-semibold mb-4 text-sm">Product</h3>
             <ul className="space-y-3">
               <li><Link href="/dashboard" className="text-sm text-foreground hover:text-foreground transition-colors">Dashboard</Link></li>
-              <li><Link href="https://github.com/your-org/marrakech-sdk" className="text-sm text-foreground hover:text-foreground transition-colors">SDK</Link></li>
-              <li><Link href="/pricing" className="text-sm text-foreground hover:text-foreground transition-colors">Pricing</Link></li>
+              <li><Link href="https://github.com/AmineAfia/marrakech" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">SDK</Link></li>
+              {/* <li><Link href="/pricing" className="text-sm text-foreground hover:text-foreground transition-colors">Pricing</Link></li> */}
             </ul>
           </div>
 
@@ -63,8 +63,8 @@ function LandingFooter() {
                 <span className="w-2 h-2 bg-green-500 rounded-full" />
                 Status
               </Link></li>
-              <li><Link href="https://docs.marrakech.dev" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">Documentation</Link></li>
-              <li><Link href="https://github.com/your-org/marrakech-sdk" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">GitHub</Link></li>
+              <li><Link href="https://github.com/AmineAfia/marrakech" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">Documentation</Link></li>
+              <li><Link href="https://github.com/AmineAfia/marrakech" target="_blank" className="text-sm text-foreground hover:text-foreground transition-colors">GitHub</Link></li>
             </ul>
           </div>
 
@@ -72,9 +72,9 @@ function LandingFooter() {
           <div>
             <h3 className="font-semibold mb-4 text-sm">Company</h3>
             <ul className="space-y-3">
-              <li><Link href="/about" className="text-sm text-foreground hover:text-foreground transition-colors">About</Link></li>
+              <li><Link href="https://x.com/eth_chainId" className="text-sm text-foreground hover:text-foreground transition-colors">About</Link></li>
               <li><Link href="/changelog" className="text-sm text-foreground hover:text-foreground transition-colors">Changelog</Link></li>
-              <li><Link href="/blog" className="text-sm text-foreground hover:text-foreground transition-colors">Blog</Link></li>
+              {/* <li><Link href="/blog" className="text-sm text-foreground hover:text-foreground transition-colors">Blog</Link></li> */}
             </ul>
           </div>
         </div>
@@ -112,7 +112,7 @@ function MinimalFooter() {
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
               <span>Status</span>
             </Link>
-            <Link href="https://docs.marrakech.dev" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">Docs</Link>
+            <Link href="https://github.com/your-org/marrakech-sdk" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">Docs</Link>
             <Link href="/support" className="text-muted-foreground hover:text-foreground transition-colors">Support</Link>
           </div>
         </div>
