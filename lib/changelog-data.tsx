@@ -7,6 +7,7 @@ export interface ChangelogEntry {
   date: string
   version?: string
   tags?: string[]
+  image?: string  // Open Graph image URL
   author: {
     name: string
     avatar?: string  // X/Twitter profile image URL
@@ -60,6 +61,7 @@ export const changelogEntries: ChangelogEntry[] = [
     date: "2025-10-21",
     version: "0.1.0.alpha.1",
     tags: ["Context Engineering", "Prompt Engineering", "Evals", "Analytics"],
+    image: "/sdk.png",
     author: {
       name: "Amine Afia",
       avatar: "https://pbs.twimg.com/profile_images/1953049307923288064/VwzTJcbz_400x400.jpg",

@@ -1,4 +1,4 @@
-import { changelogEntries, extractFirstImage } from "@/lib/changelog-data"
+import { changelogEntries } from "@/lib/changelog-data"
 import { createMetadata } from "@/lib/metadata"
 import type { Metadata } from "next"
 
@@ -13,7 +13,7 @@ export async function generateMetadata({
     const changelog = changelogEntries.find(e => e.id === entryId)
     
     if (changelog) {
-      const imageUrl = extractFirstImage(changelog)
+      const imageUrl = changelog.image
       const fullImageUrl = imageUrl?.startsWith('http') 
         ? imageUrl 
         : `https://marrakesh.dev${imageUrl}`
