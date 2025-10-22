@@ -3,8 +3,12 @@
 import { changelogEntries } from "@/lib/changelog-data"
 import { useEffect, useMemo } from "react"
 import { formatDate } from "@/lib/utils"
+import { useSearchParams } from "next/navigation"
 
 export default function ChangelogPage() {
+  const searchParams = useSearchParams()
+  const entryId = searchParams.get('entry')
+  
   const sortedChangelogs = useMemo(() => {
     return changelogEntries.sort((a, b) => {
       const dateA = new Date(a.date).getTime()
@@ -14,17 +18,15 @@ export default function ChangelogPage() {
   }, [])
 
   useEffect(() => {
-    const hash = window.location.hash
-    if (hash) {
-      const id = hash.replace('#', '')
-      const element = document.getElementById(id)
+    if (entryId) {
+      const element = document.getElementById(entryId)
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' })
         }, 100)
       }
     }
-  }, [])
+  }, [entryId])
 
   return (
     <div className="min-h-screen bg-transparent relative">
@@ -82,7 +84,7 @@ export default function ChangelogPage() {
                         <div className="relative z-10 flex flex-col gap-2">
                           <h2 className="text-2xl font-semibold tracking-tight text-balance group">
                             <a 
-                              href={`#${changelog.id}`}
+                              href={`/changelog?entry=${changelog.id}`}
                               className="hover:text-primary transition-colors flex items-center gap-2"
                             >
                               {changelog.title}
