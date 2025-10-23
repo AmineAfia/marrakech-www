@@ -99,9 +99,13 @@ Determine if the content passes or violates the rules. Set "passed" to true if i
 	} catch (error) {
 		console.error("Guardrail endpoint error:", error);
 
-		// Fail-open approach: default to allowing content on any error
-		return NextResponse.json({
-			passed: true,
-		});
+		// Fail-secure approach: return error status when validation fails
+		return NextResponse.json(
+			{
+				error: "Content validation service temporarily unavailable",
+				details: error instanceof Error ? error.message : "Unknown error",
+			},
+			{ status: 503 },
+		);
 	}
 }
