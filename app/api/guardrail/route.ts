@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
-import { gateway, generateText } from "ai";
+import { gateway, generateObject } from "ai";
+import { z } from "zod";
 import { validateApiKey } from "@/lib/auth";
+
+// Define the schema for the guardrail response
+const guardrailSchema = z.object({
+	passed: z.boolean().describe("Whether the content passes the rules"),
+	reason: z
+		.string()
+		.optional()
+		.describe("If failed, explanation of why it violated the rules"),
+});
 
 export async function POST(request: Request) {
 	try {
@@ -38,42 +48,60 @@ export async function POST(request: Request) {
 			);
 		}
 
-		// Extract prompt from request body
-		if (!body || typeof body !== "object" || !("prompt" in body)) {
+		// Extract content and rules from request body
+		if (!body || typeof body !== "object" || !("content" in body) || !("rules" in body)) {
 			return NextResponse.json(
-				{ error: "Prompt is required" },
+				{ error: "Content and rules are required" },
 				{ status: 400 },
 			);
 		}
 
-		const { prompt } = body as { prompt: string };
+		const { content, rules } = body as { content: string; rules: string };
 
-		if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
+		if (!content || typeof content !== "string" || content.trim() === "") {
 			return NextResponse.json(
-				{ error: "Prompt must be a non-empty string" },
+				{ error: "Content must be a non-empty string" },
 				{ status: 400 },
 			);
 		}
 
-		// Generate text using AI Gateway
-		const result = await generateText({
+		if (!rules || typeof rules !== "string" || rules.trim() === "") {
+			return NextResponse.json(
+				{ error: "Rules must be a non-empty string" },
+				{ status: 400 },
+			);
+		}
+
+		// Generate structured response using AI Gateway
+		const result = await generateObject({
 			model: gateway("xai/grok-4-fast-non-reasoning"),
-			prompt: prompt.trim(),
+			schema: guardrailSchema,
+			prompt: `You are a content validation system. Evaluate if the given content follows the specified rules.
+
+Rules: ${rules.trim()}
+
+Content to evaluate: ${content.trim()}
+
+Determine if the content passes or violates the rules. Set "passed" to true if it follows the rules, or false if it violates them. If it fails, provide a brief explanation in the "reason" field explaining why it violated the rules.`,
 		});
 
+		// Return structured response
+		if (result.object.passed) {
+			return NextResponse.json({
+				passed: true,
+			});
+		}
+		
 		return NextResponse.json({
-			text: result.text,
-			usage: result.usage,
-			finishReason: result.finishReason,
+			passed: false,
+			reason: result.object.reason || "Content violated rules",
 		});
 	} catch (error) {
 		console.error("Guardrail endpoint error:", error);
 
-		return NextResponse.json(
-			{
-				error: "Internal server error",
-			},
-			{ status: 500 },
-		);
+		// Fail-open approach: default to allowing content on any error
+		return NextResponse.json({
+			passed: true,
+		});
 	}
 }
